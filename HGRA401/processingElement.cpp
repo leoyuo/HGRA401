@@ -1,9 +1,9 @@
-#include "processingElement.h"
+ï»¿#include "processingElement.h"
 
 
 ProcessingElement::ProcessingElement():dout1_v(0),dout2_v(0),bout_v(0),loc_reg_v(0) {}
 ProcessingElement::~ProcessingElement() {}
-void ProcessingElement::ALU(int opcode, int in1, int in2 ,bool for_mux)//ALU×÷ÎªMUXµÄÊ±ºò£¬Òª½«in3µÄĞÅºÅ¶ËÖµ×÷Îª²ÎÊı´«µİ¸ø¸Ãº¯Êı
+void ProcessingElement::ALU(int opcode, int in1, int in2 ,bool for_mux)//ALUä½œä¸ºMUXçš„æ—¶å€™ï¼Œè¦å°†in3çš„ä¿¡å·ç«¯å€¼ä½œä¸ºå‚æ•°ä¼ é€’ç»™è¯¥å‡½æ•°
 {
 	if (opcode == 8)//MUX
 	{
@@ -41,13 +41,17 @@ void ProcessingElement::ALU(int opcode, int in1, int in2 ,bool for_mux)//ALU×÷Îª
 			alu_out = in1 - in2;
 			alu_out_v = 1;
 			break;
+		case 4://div
+			alu_out = in1 / in2;
+			alu_out_v = 1;
+			break;
 
-		case 6: //ÅĞ¶ÏÁ½ÊäÈëµÄ´óĞ¡
+		case 6: //åˆ¤æ–­ä¸¤è¾“å…¥çš„å¤§å°
 			alu_out_b = in1 < in2 ? 1 : 0;
 			alu_out_b_v = 1;
 			break;
 		case  7:
-			alu_out = in1 == in2 ? 1 : 0;//Êä³ö½ÏĞ¡µÄÖµ
+			alu_out = in1 == in2 ? 1 : 0;//è¾“å‡ºè¾ƒå°çš„å€¼
 			alu_out_v = 1;
 			break;
 		case 8:
@@ -56,6 +60,21 @@ void ProcessingElement::ALU(int opcode, int in1, int in2 ,bool for_mux)//ALU×÷Îª
 
 		case 9://MAC
 			alu_out = in1 * in2 + loc_reg;
+			alu_out_v = 1;
+			break;
+
+		case 12://leshift
+			alu_out = in1 << in2;
+			alu_out_v = 1;
+			break;
+
+		case 13://rishift
+			alu_out = in1 >> in2;
+			alu_out_v = 1;
+			break;
+
+		case 14://or
+			alu_out = in1 | in2;
 			alu_out_v = 1;
 		}
 	}
@@ -144,13 +163,13 @@ void ProcessingElement::peInportCtr2()
 
 void ProcessingElement::inBufferOutCtr1()
 {
-	if (inBuffer1.inputBuffer.size() != 0)//±£Ö¤inputBuffer³öÊıµÄÊ±ºò²»ÊÇ¿ÕµÄ
+	if (inBuffer1.inputBuffer.size() != 0)//ä¿è¯inputBufferå‡ºæ•°çš„æ—¶å€™ä¸æ˜¯ç©ºçš„
 	{				
 		inBuffer1.dataOut();
 		inbuffer1_out = inBuffer1.out;		
 	}
 	else
-		cout << "inputBuffer1ÊÇ¿ÕµÄ" << endl;
+		cout << "inputBuffer1æ˜¯ç©ºçš„" << endl;
 
 	
 
@@ -158,13 +177,13 @@ void ProcessingElement::inBufferOutCtr1()
 
 void ProcessingElement::inBufferOutCtr2()
 {
-	if (inBuffer2.inputBuffer.size() != 0)//±£Ö¤inputBuffer³öÊıµÄÊ±ºò²»ÊÇ¿ÕµÄ
+	if (inBuffer2.inputBuffer.size() != 0)//ä¿è¯inputBufferå‡ºæ•°çš„æ—¶å€™ä¸æ˜¯ç©ºçš„
 	{		
 		inBuffer2.dataOut();
 		inbuffer2_out = inBuffer2.out;		
 	}
 	else
-		cout << "inputBuffer2ÊÇ¿ÕµÄ" << endl;
+		cout << "inputBuffer2æ˜¯ç©ºçš„" << endl;
 	
 
 }
@@ -182,7 +201,7 @@ void ProcessingElement::outBuffer2In()
 
 void ProcessingElement::cycle_alu(int opcode)
 {
-	if (opcode == 2 || opcode == 9)//³Ë·¨ºÍ³ËÀÛ¼ÓĞèÒªÁ½¸öÊ±ÖÓÖÜÆÚ
+	if (opcode == 2 || opcode == 9)//ä¹˜æ³•å’Œä¹˜ç´¯åŠ éœ€è¦ä¸¤ä¸ªæ—¶é’Ÿå‘¨æœŸ
 	{
 		cycle += 2;
 	}
@@ -219,7 +238,7 @@ InTableBuffer::~InTableBuffer() {}
 
 bool InTableBuffer::isDin1BufferReady(short& in1_tag)
 {
-	//tableÖĞÊÇ·ñÓĞÍ¬Ãûtag£¬ÊÇ·ñÂúÁË£¬ÊÇ·ñÔÚÁ¬Ğø·¢ËÍÍ¬Ò»¸ötag¾ùÊÇÊ¹ÓÃ¸Ãº¯ÊıµÄ·µ»ØÖµ±íÊ¾,¼´bp2lastPe
+	//tableä¸­æ˜¯å¦æœ‰åŒåtagï¼Œæ˜¯å¦æ»¡äº†ï¼Œæ˜¯å¦åœ¨è¿ç»­å‘é€åŒä¸€ä¸ªtagå‡æ˜¯ä½¿ç”¨è¯¥å‡½æ•°çš„è¿”å›å€¼è¡¨ç¤º,å³bp2lastPe
 	if (in1_tag == last_tag_1)
 	{
 		bp2lastPe_1 = 0;
@@ -258,7 +277,7 @@ bool InTableBuffer::isDin1BufferReady(short& in1_tag)
 		same_tag = 0;
 	}
 
-	if (interspace & !same_tag)//bufferÖĞÓĞ¿ÕÎ»ÇÒÎŞÍ¬Ãûtag
+	if (interspace & !same_tag)//bufferä¸­æœ‰ç©ºä½ä¸”æ— åŒåtag
 	{
 		bp2lastPe_1 = 1;
 	}
@@ -309,7 +328,7 @@ bool InTableBuffer::isDin2BufferReady(short& in2_tag)
 		same_tag = 0;
 	}
 
-	if (interspace & !same_tag)//bufferÖĞÓĞ¿ÕÎ»ÇÒÎŞÍ¬Ãûtag
+	if (interspace & !same_tag)//bufferä¸­æœ‰ç©ºä½ä¸”æ— åŒåtag
 	{
 		bp2lastPe_2 = 1;
 	}
@@ -360,7 +379,7 @@ bool InTableBuffer::isBinBufferReady(short& in3_tag)
 		same_tag = 0;
 	}
 
-	if (interspace & !same_tag)//bufferÖĞÓĞ¿ÕÎ»ÇÒÎŞÍ¬Ãûtag
+	if (interspace & !same_tag)//bufferä¸­æœ‰ç©ºä½ä¸”æ— åŒåtag
 	{
 		bp2lastPe_3 = 1;
 	}
@@ -397,9 +416,9 @@ bool InTableBuffer::line_ok(vector<TableLine>::size_type i,ProcessingElement* pe
 	}
 	else if (!flag_reg1 & flag_reg2 & flag_reg3)//011
 	{
-		if (pe->config_reg.front()[2] == 8)//MUX²Ù×÷
+		if (pe->config_reg.front()[2] == 8)//MUXæ“ä½œ
 		{
-			if (InTableBufferEntity[i].valid3 & InTableBufferEntity[i].data3)// valid3=1;data3=0,Ñ¡Ôñin2
+			if (InTableBufferEntity[i].valid3 & InTableBufferEntity[i].data3)// valid3=1;data3=0,é€‰æ‹©in2
 			{
 				if (InTableBufferEntity[i].valid2)
 				{
@@ -431,10 +450,10 @@ bool InTableBuffer::line_ok(vector<TableLine>::size_type i,ProcessingElement* pe
 	}
 	else if (flag_reg1 & !flag_reg2 & flag_reg3)//101
 	{
-		if (pe->config_reg.front()[2] == 8)//MUX²Ù×÷
+		if (pe->config_reg.front()[2] == 8)//MUXæ“ä½œ
 		{
 			
-			if (InTableBufferEntity[i].valid3 & InTableBufferEntity[i].data3)//valid3=1;data3=1,Ñ¡Ôñin1
+			if (InTableBufferEntity[i].valid3 & InTableBufferEntity[i].data3)//valid3=1;data3=1,é€‰æ‹©in1
 			{
 				if (InTableBufferEntity[i].valid1)
 				{
@@ -464,10 +483,10 @@ bool InTableBuffer::line_ok(vector<TableLine>::size_type i,ProcessingElement* pe
 	}
 	else if (flag_reg1 & flag_reg2 & flag_reg3)//111
 	{
-		if (pe->config_reg.front()[2] == 8)//MUX²Ù×÷
+		if (pe->config_reg.front()[2] == 8)//MUXæ“ä½œ
 		{
 
-			if (InTableBufferEntity[i].valid3 & !InTableBufferEntity[i].data3)//valid3=1;data3=0,Ñ¡Ôñin2
+			if (InTableBufferEntity[i].valid3 & !InTableBufferEntity[i].data3)//valid3=1;data3=0,é€‰æ‹©in2
 			{
 				if (InTableBufferEntity[i].valid2)
 				{
@@ -476,7 +495,7 @@ bool InTableBuffer::line_ok(vector<TableLine>::size_type i,ProcessingElement* pe
 				else
 					return 0;
 			}
-			else if (InTableBufferEntity[i].valid3 & InTableBufferEntity[i].data3)//valid3=1;data3=1,Ñ¡Ôñin1
+			else if (InTableBufferEntity[i].valid3 & InTableBufferEntity[i].data3)//valid3=1;data3=1,é€‰æ‹©in1
 			{
 				if (InTableBufferEntity[i].valid1)
 					return 1;
@@ -508,28 +527,28 @@ void InTableBuffer::dataIn(ProcessingElement* pe)
 	flag_reg1 = pe->config_reg.front()[20];
 	flag_reg2 = pe->config_reg.front()[21];
 	flag_reg3 = pe->config_reg.front()[22];
-	if (flag_reg1)//in1portÃ»ÓĞĞü¿Õ
+	if (flag_reg1)//in1portæ²¡æœ‰æ‚¬ç©º
 	{
 		bool match = 0;
-		if (pe->din1_v)//ÉÏÒ»¸öPE·¢³öÁËrequestÇëÇó
+		if (pe->din1_v)//ä¸Šä¸€ä¸ªPEå‘å‡ºäº†requestè¯·æ±‚
 		{
 			bool ready1 = isDin1BufferReady(pe->din1_tag);
 			pe->ack2in1port = pe->inTableBuffer.bp2lastPe_1;
-			if (ready1)//buffer¿ÉÒÔ½ÓÊÜÊı¾İ
+			if (ready1)//bufferå¯ä»¥æ¥å—æ•°æ®
 			{
 				pe->ack2in1port = 1;
-				//¿ªÊ¼¼ìË÷ÄÄ¶ù¿ÉÒÔ´æ·ÅÊı¾İ²¢ÇÒ¼ÇÂ¼Ò»ÏÂ´æ·ÅÊı¾İµÄbufferID¡£
+				//å¼€å§‹æ£€ç´¢å“ªå„¿å¯ä»¥å­˜æ”¾æ•°æ®å¹¶ä¸”è®°å½•ä¸€ä¸‹å­˜æ”¾æ•°æ®çš„bufferIDã€‚
 				for (vector<TableLine>::size_type i = 0; i < InTableBufferEntity.size(); i++)
 				{
 					if ((InTableBufferEntity[i].tag == pe->din1_tag) & ((InTableBufferEntity[i].valid2) | (InTableBufferEntity[i].valid3)))
 					{
-						//tagÆ¥ÅäÉÏÁË£¬ÅÅ³ıÁËÆäËûÁ½¸ö¶Ë¿ÚÊı¾İÃ»ÓĞ´æ´¢½øÈ¥ºÍtag±»ÇåÁãÔì³ÉµÄtag==0Æ¥ÅäµÄÇé¿ö					
+						//tagåŒ¹é…ä¸Šäº†ï¼Œæ’é™¤äº†å…¶ä»–ä¸¤ä¸ªç«¯å£æ•°æ®æ²¡æœ‰å­˜å‚¨è¿›å»å’Œtagè¢«æ¸…é›¶é€ æˆçš„tag==0åŒ¹é…çš„æƒ…å†µ					
 						InTableBufferEntity[i].valid1 = 1;
 						InTableBufferEntity[i].data1 = pe->din1;
 						last_tag_1 = pe->din1_tag;
-						InTableBufferEntity[i].line_ok = line_ok(i,pe);//¼ì²étableĞĞÊÇ²»ÊÇ×¼±¸ºÃÁË
+						InTableBufferEntity[i].line_ok = line_ok(i,pe);//æ£€æŸ¥tableè¡Œæ˜¯ä¸æ˜¯å‡†å¤‡å¥½äº†
 						match = 1;
-						if (InTableBufferEntity[i].line_ok)	//½«×¼±¸ºÃµÄĞĞID·Å½øÁ´±í
+						if (InTableBufferEntity[i].line_ok)	//å°†å‡†å¤‡å¥½çš„è¡ŒIDæ”¾è¿›é“¾è¡¨
 						{
 							line_ready_order.push_back(i);
 						}
@@ -542,7 +561,7 @@ void InTableBuffer::dataIn(ProcessingElement* pe)
 				}
 				if (!match)
 				{
-					//table±éÀúÒ»±éÃ»ÓĞÆ¥ÅäµÄtag,½«tagºÍÊı¾İ²åÈë±íÖĞ¿ÕÎ»
+					//tableéå†ä¸€éæ²¡æœ‰åŒ¹é…çš„tag,å°†tagå’Œæ•°æ®æ’å…¥è¡¨ä¸­ç©ºä½
 					for (vector<TableLine>::size_type i = 0; i < InTableBufferEntity.size(); i++)
 					{
 						if (InTableBufferEntity[i].tag == 0 && ((InTableBufferEntity[i].valid2) | (InTableBufferEntity[i].valid3)) == 0)
@@ -550,9 +569,9 @@ void InTableBuffer::dataIn(ProcessingElement* pe)
 							InTableBufferEntity[i].tag = pe->din1_tag;
 							InTableBufferEntity[i].valid1 = 1;
 							InTableBufferEntity[i].data1 = pe->din1;
-							InTableBufferEntity[i].line_ok = line_ok(i, pe);//¼ì²étableĞĞÊÇ²»ÊÇ×¼±¸ºÃÁË
+							InTableBufferEntity[i].line_ok = line_ok(i, pe);//æ£€æŸ¥tableè¡Œæ˜¯ä¸æ˜¯å‡†å¤‡å¥½äº†
 							last_tag_1 = pe->din1_tag;
-							if (InTableBufferEntity[i].line_ok)	//½«×¼±¸ºÃµÄĞĞID·Å½øÁ´±í
+							if (InTableBufferEntity[i].line_ok)	//å°†å‡†å¤‡å¥½çš„è¡ŒIDæ”¾è¿›é“¾è¡¨
 							{
 								line_ready_order.push_back(i);
 							}
@@ -561,34 +580,34 @@ void InTableBuffer::dataIn(ProcessingElement* pe)
 					}
 				}
 				
-				//Çå³ıÉÏÒ»¸öPE¶Ë¿ÚÉÏµÄÊı¾İ
+				//æ¸…é™¤ä¸Šä¸€ä¸ªPEç«¯å£ä¸Šçš„æ•°æ®
 			
 			}
 		}
 	}
 
-	if (flag_reg2)//in2portÃ»ÓĞĞü¿Õ
+	if (flag_reg2)//in2portæ²¡æœ‰æ‚¬ç©º
 	{
 		bool match = 0;
-		if (pe->din2_v)//Á¬½Ó¸Ã¶Ë¿ÚµÄÉÏÒ»¸öPE·¢³öÁËrequestÇëÇó
+		if (pe->din2_v)//è¿æ¥è¯¥ç«¯å£çš„ä¸Šä¸€ä¸ªPEå‘å‡ºäº†requestè¯·æ±‚
 		{
 			bool ready2 = isDin2BufferReady(pe->din2_tag);
 			pe->ack2in2port = pe->inTableBuffer.bp2lastPe_2;
-			if (ready2)//buffer¿ÉÒÔ½ÓÊÜÊı¾İ
+			if (ready2)//bufferå¯ä»¥æ¥å—æ•°æ®
 			{
 				pe->ack2in2port = 1;
-				//¿ªÊ¼¼ìË÷ÄÄ¶ù¿ÉÒÔ´æ·ÅÊı¾İ²¢ÇÒ¼ÇÂ¼Ò»ÏÂ´æ·ÅÊı¾İµÄbufferID¡£
+				//å¼€å§‹æ£€ç´¢å“ªå„¿å¯ä»¥å­˜æ”¾æ•°æ®å¹¶ä¸”è®°å½•ä¸€ä¸‹å­˜æ”¾æ•°æ®çš„bufferIDã€‚
 				for (vector<TableLine>::size_type i = 0; i < InTableBufferEntity.size(); i++)
 				{
 					if ((InTableBufferEntity[i].tag == pe->din2_tag) & ((InTableBufferEntity[i].valid1) | (InTableBufferEntity[i].valid3)))
 					{
-						//tagÆ¥ÅäÉÏÁË£¬ÅÅ³ıÁËºÍÆäËûÁ½¸ö¶Ë¿ÚÊı¾İÃ»ÓĞ´æ´¢½øÈ¥£¬µ«ÊÇtag±»ÇåÁãÔì³ÉµÄtag==0Æ¥ÅäµÄÇé¿ö					
+						//tagåŒ¹é…ä¸Šäº†ï¼Œæ’é™¤äº†å’Œå…¶ä»–ä¸¤ä¸ªç«¯å£æ•°æ®æ²¡æœ‰å­˜å‚¨è¿›å»ï¼Œä½†æ˜¯tagè¢«æ¸…é›¶é€ æˆçš„tag==0åŒ¹é…çš„æƒ…å†µ					
 						InTableBufferEntity[i].valid2 = 1;
 						InTableBufferEntity[i].data2 = pe->din2;
 						last_tag_2 = pe->din2_tag;
-						InTableBufferEntity[i].line_ok = line_ok(i,pe);//¼ì²étableĞĞÊÇ²»ÊÇ×¼±¸ºÃÁË
+						InTableBufferEntity[i].line_ok = line_ok(i,pe);//æ£€æŸ¥tableè¡Œæ˜¯ä¸æ˜¯å‡†å¤‡å¥½äº†
 						match = 1;
-						if (InTableBufferEntity[i].line_ok)	//½«×¼±¸ºÃµÄĞĞID·Å½øÁ´±í
+						if (InTableBufferEntity[i].line_ok)	//å°†å‡†å¤‡å¥½çš„è¡ŒIDæ”¾è¿›é“¾è¡¨
 						{
 							line_ready_order.push_back(i);
 						}
@@ -601,7 +620,7 @@ void InTableBuffer::dataIn(ProcessingElement* pe)
 				}
 				if (!match)
 				{
-					//table±éÀúÒ»±éÃ»ÓĞÆ¥ÅäµÄtag,½«tagºÍÊı¾İ²åÈë±íÖĞ¿ÕÎ»
+					//tableéå†ä¸€éæ²¡æœ‰åŒ¹é…çš„tag,å°†tagå’Œæ•°æ®æ’å…¥è¡¨ä¸­ç©ºä½
 					for (vector<TableLine>::size_type i = 0; i < InTableBufferEntity.size(); i++)
 					{
 						if (InTableBufferEntity[i].tag == 0 && ((InTableBufferEntity[i].valid1) | (InTableBufferEntity[i].valid3 == 0)))
@@ -609,10 +628,10 @@ void InTableBuffer::dataIn(ProcessingElement* pe)
 							InTableBufferEntity[i].tag = pe->din2_tag;
 							InTableBufferEntity[i].valid2 = 1;
 							InTableBufferEntity[i].data2 = pe->din2;
-							InTableBufferEntity[i].line_ok = line_ok(i, pe);//¼ì²étableĞĞÊÇ²»ÊÇ×¼±¸ºÃÁË
+							InTableBufferEntity[i].line_ok = line_ok(i, pe);//æ£€æŸ¥tableè¡Œæ˜¯ä¸æ˜¯å‡†å¤‡å¥½äº†
 							last_tag_2 = pe->din2_tag;
 							break;
-							//ÕâÖÖÇé¿öÏÂ²»ÓÃ¼ì²âĞĞÊÇ·ñOK£¬ÒòÎªdin1ÊÇµÚÒ»¸ö½øÈëµ½±í¸ñÖĞµÄÊı¾İ
+							//è¿™ç§æƒ…å†µä¸‹ä¸ç”¨æ£€æµ‹è¡Œæ˜¯å¦OKï¼Œå› ä¸ºdin1æ˜¯ç¬¬ä¸€ä¸ªè¿›å…¥åˆ°è¡¨æ ¼ä¸­çš„æ•°æ®
 						}
 					}
 				}
@@ -621,28 +640,28 @@ void InTableBuffer::dataIn(ProcessingElement* pe)
 		}
 	}
 
-	if (flag_reg3)//in3portÃ»ÓĞĞü¿Õ
+	if (flag_reg3)//in3portæ²¡æœ‰æ‚¬ç©º
 	{
 		bool match = 0;
-		if (pe->bin_v)//Á¬½Ó¸Ã¶Ë¿ÚµÄÉÏÒ»¸öPE·¢³öÁËrequestÇëÇó
+		if (pe->bin_v)//è¿æ¥è¯¥ç«¯å£çš„ä¸Šä¸€ä¸ªPEå‘å‡ºäº†requestè¯·æ±‚
 		{
 			bool ready3 = isBinBufferReady(pe->bin_tag);
 			pe->ack2in3port = pe->inTableBuffer.bp2lastPe_3;
-			if (ready3)//buffer¿ÉÒÔ½ÓÊÜÊı¾İ
+			if (ready3)//bufferå¯ä»¥æ¥å—æ•°æ®
 			{
 				pe->ack2in3port = 1;
-				//¿ªÊ¼¼ìË÷ÄÄ¶ù¿ÉÒÔ´æ·ÅÊı¾İ²¢ÇÒ¼ÇÂ¼Ò»ÏÂ´æ·ÅÊı¾İµÄbufferID¡£
+				//å¼€å§‹æ£€ç´¢å“ªå„¿å¯ä»¥å­˜æ”¾æ•°æ®å¹¶ä¸”è®°å½•ä¸€ä¸‹å­˜æ”¾æ•°æ®çš„bufferIDã€‚
 				for (vector<TableLine>::size_type i = 0; i < InTableBufferEntity.size(); i++)
 				{
 					if ((InTableBufferEntity[i].tag == pe->bin_tag) & ((InTableBufferEntity[i].valid1) | (InTableBufferEntity[i].valid2)))
 					{
-						//tagÆ¥ÅäÉÏÁË£¬ÅÅ³ıÁËºÍÆäËûÁ½¸ö¶Ë¿ÚÊı¾İÃ»ÓĞ´æ´¢½øÈ¥£¬µ«ÊÇtag±»ÇåÁãÔì³ÉµÄtag==0Æ¥ÅäµÄÇé¿ö					
+						//tagåŒ¹é…ä¸Šäº†ï¼Œæ’é™¤äº†å’Œå…¶ä»–ä¸¤ä¸ªç«¯å£æ•°æ®æ²¡æœ‰å­˜å‚¨è¿›å»ï¼Œä½†æ˜¯tagè¢«æ¸…é›¶é€ æˆçš„tag==0åŒ¹é…çš„æƒ…å†µ					
 						InTableBufferEntity[i].valid3 = 1;
 						InTableBufferEntity[i].data3 = pe->bin;
 						last_tag_3 = pe->bin_tag;
-						InTableBufferEntity[i].line_ok = line_ok(i,pe);//¼ì²étableĞĞÊÇ²»ÊÇ×¼±¸ºÃÁË
+						InTableBufferEntity[i].line_ok = line_ok(i,pe);//æ£€æŸ¥tableè¡Œæ˜¯ä¸æ˜¯å‡†å¤‡å¥½äº†
 						match = 1;
-						if (InTableBufferEntity[i].line_ok)	//½«×¼±¸ºÃµÄĞĞID·Å½øÁ´±í
+						if (InTableBufferEntity[i].line_ok)	//å°†å‡†å¤‡å¥½çš„è¡ŒIDæ”¾è¿›é“¾è¡¨
 						{
 							line_ready_order.push_back(i);
 						}
@@ -655,7 +674,7 @@ void InTableBuffer::dataIn(ProcessingElement* pe)
 				}
 				if (!match)
 				{
-					//table±éÀúÒ»±éÃ»ÓĞÆ¥ÅäµÄtag,½«tagºÍÊı¾İ²åÈë±íÖĞ¿ÕÎ»
+					//tableéå†ä¸€éæ²¡æœ‰åŒ¹é…çš„tag,å°†tagå’Œæ•°æ®æ’å…¥è¡¨ä¸­ç©ºä½
 					for (vector<TableLine>::size_type i = 0; i < InTableBufferEntity.size(); i++)
 					{
 						if (InTableBufferEntity[i].tag == 0 && ((InTableBufferEntity[i].valid1) | (InTableBufferEntity[i].valid2 == 0)))
@@ -663,10 +682,10 @@ void InTableBuffer::dataIn(ProcessingElement* pe)
 							InTableBufferEntity[i].tag = pe->bin_tag;
 							InTableBufferEntity[i].valid3 = 1;
 							InTableBufferEntity[i].data3 = pe->bin;
-							InTableBufferEntity[i].line_ok = line_ok(i, pe);//¼ì²étableĞĞÊÇ²»ÊÇ×¼±¸ºÃÁË
+							InTableBufferEntity[i].line_ok = line_ok(i, pe);//æ£€æŸ¥tableè¡Œæ˜¯ä¸æ˜¯å‡†å¤‡å¥½äº†
 							last_tag_3 = pe->bin_tag;
 							break;
-							//ÕâÖÖÇé¿öÏÂ²»ÓÃ¼ì²âĞĞÊÇ·ñOK£¬ÒòÎªdin1ÊÇµÚÒ»¸ö½øÈëµ½±í¸ñÖĞµÄÊı¾İ
+							//è¿™ç§æƒ…å†µä¸‹ä¸ç”¨æ£€æµ‹è¡Œæ˜¯å¦OKï¼Œå› ä¸ºdin1æ˜¯ç¬¬ä¸€ä¸ªè¿›å…¥åˆ°è¡¨æ ¼ä¸­çš„æ•°æ®
 						}
 					}
 				}
@@ -683,7 +702,7 @@ void InTableBuffer::dataOut(ProcessingElement* pe)
 	{
 		if (InTableBufferEntity[*i].line_ok)
 		{
-			//²»È¥¼ì²âÊÇ²»ÊÇÃ¿Ò»¸ö¶Ë¿Ú¶¼ÊÇ·ÇĞü¿ÕµÄ×´Ì¬£¬¼´±ãinbufferÖĞÊÇÎŞĞ§µÄÊı¾İÒ²ÄÃ³öÀ´£¬Ö»²»¹ı²»Ê¹ÓÃ
+			//ä¸å»æ£€æµ‹æ˜¯ä¸æ˜¯æ¯ä¸€ä¸ªç«¯å£éƒ½æ˜¯éæ‚¬ç©ºçš„çŠ¶æ€ï¼Œå³ä¾¿inbufferä¸­æ˜¯æ— æ•ˆçš„æ•°æ®ä¹Ÿæ‹¿å‡ºæ¥ï¼Œåªä¸è¿‡ä¸ä½¿ç”¨
 			pe->inbuffer1_out = InTableBufferEntity[*i].data1;
 			pe->inbuffer1_out_v = InTableBufferEntity[*i].valid1;
 			pe->inbuffer1_out_tag = InTableBufferEntity[*i].tag;
