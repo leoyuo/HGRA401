@@ -233,11 +233,12 @@ void PeSimProcess(ProcessingElement* pe_current)
 		{
 			if (bin_from_port == 0)//lend的port2back
 			{
-
+				pe_current->bin = lend[bin_from_index]->out2back;
 				pe_current->bin_v = lend[bin_from_index]->out2back;//使能信号从valid口进入																					   											
 			}
 			else if (bin_from_port == 1)//FG2的port2end
 			{
+				pe_current->bin = lend[bin_from_index]->out2end;
 				pe_current->bin_v = lend[bin_from_index]->out2end;//使能信号从valid口进入																					  												
 			}
 			else
@@ -1213,7 +1214,7 @@ void pe_sim_step1(ProcessingElement* pe_current)
 		//数据进入tableBuffer之后才开始清数据
 		if (din1_from_port == 0)//port1
 		{
-			if (port1_fanout_num <= 1)//没有一对多的情况
+			if (port1_fanout_num <= 1)//一对一的情况
 			{
 				if (pe_current->ack2in1port)
 				{
@@ -2148,7 +2149,7 @@ void LeSimProcess(Load* le_current,LSUnit* lsunit)
 					lsunit->AddTrans(le_current->addr_out, le_index_current, (int)le_current->addr_out_v);
 				}
 			}
-			lsunit->update();
+			//lsunit->update();
 			//
 			if (le_current->load_success)
 			{
@@ -2214,7 +2215,7 @@ void SeSimProcess(Store* se_current, LSUnit* lsunit)
 	//se extra out for end node 
 	se_current->se_extra_out_for_end = 0;
 	se_current->se_extra_out_for_end_v = 0;
-	bool tag_mode = se_current->config_reg.front()[6];
+	bool tag_mode = se_current->config_reg.front()[8];
 	if (tag_mode)//进行tag处理
 	{
 		//addr fetch

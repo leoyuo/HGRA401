@@ -110,6 +110,7 @@ public:
 	short outbuffer3_tag;
 	//ack пе╨е
 	bool ack2in1port, ack2in2port, ack2in3port;
+	bool ack_outbuffer12alu, ack_outbuffer22alu;
 
 	//
 	int cycle;
@@ -149,7 +150,7 @@ public:
 	short outbuffer1_in_tag, outbuffer2_in_tag;
 	bool outbuffer1_in_v, outbuffer2_in_v, outbuffer3_in_v;
 	int outbuffer1_out, outbuffer2_out;
-	bool ack_outbuffer12alu, ack_outbuffer22alu;
+	
 	
 	
 	

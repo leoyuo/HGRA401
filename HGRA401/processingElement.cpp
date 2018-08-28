@@ -399,7 +399,7 @@ bool InTableBuffer::line_ok(vector<TableLine>::size_type i,ProcessingElement* pe
 	{
 		if (pe->config_reg.front()[2] == 8)//MUX²Ù×÷
 		{
-			if (InTableBufferEntity[i].valid3 & InTableBufferEntity[i].data3)// valid3=1;data3=0,Ñ¡Ôñin2
+			if (InTableBufferEntity[i].valid3 & !InTableBufferEntity[i].data3)// valid3=1;data3=0,Ñ¡Ôñin2
 			{
 				if (InTableBufferEntity[i].valid2)
 				{
@@ -501,8 +501,8 @@ void InTableBuffer::dataIn(ProcessingElement* pe)
 {
 	//ack clear before op
 	pe->ack2in1port = 0;
-	pe->ack2in1port = 0;
-	pe->ack2in1port = 0;
+	pe->ack2in2port = 0;
+	pe->ack2in3port = 0;
 
 	//check flag_reg,3steps to simulate
 	flag_reg1 = pe->config_reg.front()[20];
