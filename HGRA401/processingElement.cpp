@@ -42,6 +42,11 @@ void ProcessingElement::ALU(int opcode, int in1, int in2 ,bool for_mux)//ALU作为
 			alu_out_v = 1;
 			break;
 
+		case 4://div
+			alu_out = in1 / in2;
+			alu_out_v = 1;
+			break;
+
 		case 6: //判断两输入的大小
 			alu_out_b = in1 < in2 ? 1 : 0;
 			alu_out_b_v = 1;
@@ -56,6 +61,19 @@ void ProcessingElement::ALU(int opcode, int in1, int in2 ,bool for_mux)//ALU作为
 
 		case 9://MAC
 			alu_out = in1 * in2 + loc_reg;
+			alu_out_v = 1;
+			break;
+
+		case 12://leshift
+			alu_out = in1 << in2;
+			alu_out_v = 1;
+			break;
+		case 13://rishift
+			alu_out = in1 >> in2;
+			alu_out_v = 1;
+			break;
+		case 14://or
+			alu_out = in1 | in2;
 			alu_out_v = 1;
 		}
 	}
@@ -545,7 +563,7 @@ void InTableBuffer::dataIn(ProcessingElement* pe)
 					//table遍历一遍没有匹配的tag,将tag和数据插入表中空位
 					for (vector<TableLine>::size_type i = 0; i < InTableBufferEntity.size(); i++)
 					{
-						if (InTableBufferEntity[i].tag == 0 && ((InTableBufferEntity[i].valid2) | (InTableBufferEntity[i].valid3)) == 0)
+						if (InTableBufferEntity[i].tag == 0 && ((InTableBufferEntity[i].valid2) | (InTableBufferEntity[i].valid3) | (InTableBufferEntity[i].valid1)) == 0)
 						{
 							InTableBufferEntity[i].tag = pe->din1_tag;
 							InTableBufferEntity[i].valid1 = 1;
@@ -604,7 +622,7 @@ void InTableBuffer::dataIn(ProcessingElement* pe)
 					//table遍历一遍没有匹配的tag,将tag和数据插入表中空位
 					for (vector<TableLine>::size_type i = 0; i < InTableBufferEntity.size(); i++)
 					{
-						if (InTableBufferEntity[i].tag == 0 && ((InTableBufferEntity[i].valid1) | (InTableBufferEntity[i].valid3 == 0)))
+						if (InTableBufferEntity[i].tag == 0 && ((InTableBufferEntity[i].valid1) | (InTableBufferEntity[i].valid3) | (InTableBufferEntity[i].valid2)) == 0)
 						{
 							InTableBufferEntity[i].tag = pe->din2_tag;
 							InTableBufferEntity[i].valid2 = 1;
@@ -658,7 +676,7 @@ void InTableBuffer::dataIn(ProcessingElement* pe)
 					//table遍历一遍没有匹配的tag,将tag和数据插入表中空位
 					for (vector<TableLine>::size_type i = 0; i < InTableBufferEntity.size(); i++)
 					{
-						if (InTableBufferEntity[i].tag == 0 && ((InTableBufferEntity[i].valid1) | (InTableBufferEntity[i].valid2 == 0)))
+						if (InTableBufferEntity[i].tag == 0 && ((InTableBufferEntity[i].valid1) | (InTableBufferEntity[i].valid3) | (InTableBufferEntity[i].valid2)) == 0)
 						{
 							InTableBufferEntity[i].tag = pe->bin_tag;
 							InTableBufferEntity[i].valid3 = 1;

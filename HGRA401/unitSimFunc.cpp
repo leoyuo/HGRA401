@@ -766,8 +766,11 @@ void PeSimProcess(ProcessingElement* pe_current)
 				*/
 			}
 
-			else if (1)//011
+			else if (is_din1_float == 0 && is_din2_float != 0 && is_bin_float == !0)//011
 			{
+				pe_sim_step3_no_tag(pe_current);
+				pe_sim_step2_no_tag(pe_current);
+				pe_sim_step1_no_tag(pe_current);
 			}
 			//......	
 			else
