@@ -1,4 +1,4 @@
-#include "configParse.h"
+ï»¿#include "configParse.h"
 
 ConfigParse::ConfigParse() { vec_config_ori.resize(unitTotalNums); 
 							vec_config_parsed.resize(unitTotalNums);}
@@ -22,7 +22,7 @@ void ConfigParse::configFile2vec(ifstream& config_ori)
 			pos = str_line.find(space);
 		}
 		vec_line.push_back(str_line);
-		vec_config_ori[i] = vec_line;		//vec_config_oriÀïÃæ´æ´¢µÄÊÇÔ­Ê¼×Ö·û
+		vec_config_ori[i] = vec_line;		//vec_config_orié‡Œé¢å­˜å‚¨çš„æ˜¯åŸå§‹å­—ç¬¦
 		vec_line.clear();
 		i++;
 	}
@@ -44,29 +44,35 @@ pair<int,int> ConfigParse::pefield1(string& str)		//[category+pe_index]
 int ConfigParse::pefield2(string& str)		//[opcode]
 {
 	if (str == "dor")
-		return 0;				//dor----ĞİÃß
+		return 0;				//dor----ä¼‘çœ 
 	else if (str == "add")
-		return 1;				//ÓĞ·ûºÅ¼Ó·¨
+		return 1;				//æœ‰ç¬¦å·åŠ æ³•
 	else if (str == "sub")
-		return 3;				//ÓĞ·ûºÅ¼õ·¨
+		return 3;				//æœ‰ç¬¦å·å‡æ³•
 	else if (str == "mul")
-		return 2;				//³Ë·¨
+		return 2;				//ä¹˜æ³•
 	else if (str == "div")
-		return 4;				//³ı·¨
+		return 4;				//é™¤æ³•
 	else if (str == "mod")
-		return 5;				//ÇóÄ£
+		return 5;				//æ±‚æ¨¡
 	else if (str == "mac")
-		return 9;				//³ËÀÛ¼Ó
+		return 9;				//ä¹˜ç´¯åŠ 
 	else if (str == "comb")
-		return 6;				//±È½ÏÊä³ö²¼¶ûÖµ
+		return 6;				//æ¯”è¾ƒè¾“å‡ºå¸ƒå°”å€¼
 	else if (str == "come")
-		return 7;				//±È½ÏÁ½¸öÊı¾İÊÇ·ñÏàµÈ
+		return 7;				//æ¯”è¾ƒä¸¤ä¸ªæ•°æ®æ˜¯å¦ç›¸ç­‰
 	else if (str == "mux")
 		return 8;
 	else if (str == "com2i")
-		return 100;				//ĞéÄâ²Ù×÷£¬ÕæÊµÇé¿ö²»´æÔÚ
+		return 100;				//è™šæ‹Ÿæ“ä½œï¼ŒçœŸå®æƒ…å†µä¸å­˜åœ¨
 	else if (str == "trans")
 		return 11;
+	else if (str == "leshift")
+		return 12;
+	else if (str == "rishift")
+		return 13;
+	else if (str == "or")
+		return 14;
 	else
 	{
 		//cout << "no opcode matched!" << endl;
@@ -76,7 +82,7 @@ int ConfigParse::pefield2(string& str)		//[opcode]
 vector<int> ConfigParse::pefield3_4_5(string& str)			//[in1_from+in1_port+in1_flag]
 {
 	string head = get_string(str);
-	if (head == "pe")//À´Ô´×ÔPE
+	if (head == "pe")//æ¥æºè‡ªPE
 	{
 		string::size_type pos;
 		string dot_b, dot_a;
@@ -102,7 +108,7 @@ vector<int> ConfigParse::pefield3_4_5(string& str)			//[in1_from+in1_port+in1_fl
 			//cout << "string field is wrong." << endl;
 		}
 	}
-	else if (head == "le")//À´Ô´×ÔLE
+	else if (head == "le")//æ¥æºè‡ªLE
 	{
 		vector<int> vec;
 		string tmp;
@@ -113,11 +119,11 @@ vector<int> ConfigParse::pefield3_4_5(string& str)			//[in1_from+in1_port+in1_fl
 		ss1 >> num1;
 		vec.clear();
 		vec.push_back(num1);
-		vec.push_back(0);//LEÃ»ÓĞ¶Ë¿Ú£¬Ê¹ÓÃ0À´±íÊ¾Ä¬ÈÏ
+		vec.push_back(0);//LEæ²¡æœ‰ç«¯å£ï¼Œä½¿ç”¨0æ¥è¡¨ç¤ºé»˜è®¤
 		vec.push_back(1);
 		return vec;
 	}
-	else if (head == "fin")//±íÊ¾Ğü¿Õ,fin
+	else if (head == "fin")//è¡¨ç¤ºæ‚¬ç©º,fin
 	{
 		vector<int> vec;
 		vec.clear();
@@ -126,7 +132,7 @@ vector<int> ConfigParse::pefield3_4_5(string& str)			//[in1_from+in1_port+in1_fl
 		vec.push_back(0);
 		return vec;
 	}
-	else if (head == "ta")//À´×ÔTA
+	else if (head == "ta")//æ¥è‡ªTA
 	{
 		vector<int> vec;
 		int num;
@@ -135,7 +141,7 @@ vector<int> ConfigParse::pefield3_4_5(string& str)			//[in1_from+in1_port+in1_fl
 		ss >> num;
 		vec.clear();
 		vec.push_back(num);
-		vec.push_back(0);//Ä¬ÈÏÊÇ¶Ë¿Ú1
+		vec.push_back(0);//é»˜è®¤æ˜¯ç«¯å£1
 		vec.push_back(9);
 		return vec;
 	}
@@ -144,8 +150,8 @@ vector<int> ConfigParse::pefield3_4_5(string& str)			//[in1_from+in1_port+in1_fl
 	//	vector<int> vec;
 	//	vec.clear();
 	//	vec.push_back(0);
-	//	vec.push_back(0);//Ä¬ÈÏÊÇ¶Ë¿Ú1
-	//	vec.push_back(9);//tiµÄflagÊÇ9
+	//	vec.push_back(0);//é»˜è®¤æ˜¯ç«¯å£1
+	//	vec.push_back(9);//tiçš„flagæ˜¯9
 	//	return vec;
 	//}
 	else if (head == "se")
@@ -159,11 +165,11 @@ vector<int> ConfigParse::pefield3_4_5(string& str)			//[in1_from+in1_port+in1_fl
 		ss1 >> num1;
 		vec.clear();
 		vec.push_back(num1);
-		vec.push_back(0);//SEÃ»ÓĞ¶Ë¿Ú£¬Ê¹ÓÃ0À´±íÊ¾Ä¬ÈÏ¶Ë¿Ú1
+		vec.push_back(0);//SEæ²¡æœ‰ç«¯å£ï¼Œä½¿ç”¨0æ¥è¡¨ç¤ºé»˜è®¤ç«¯å£1
 		vec.push_back(10);
 		return vec;
 	}
-	else if(head == "lbegin"||head == "lend"||head == "join"||head == "switch"||head == "break"||head == "lends")//À´Ô´ÓÚfg
+	else if(head == "lbegin"||head == "lend"||head == "join"||head == "switch"||head == "break"||head == "lends")//æ¥æºäºfg
 	{
 		string::size_type pos1, pos2;
 		string dot_b, dot_a, categroy;
@@ -516,7 +522,7 @@ vector<int> ConfigParse::fgfield2(string& str)
 {
 	vector<int> vec;
 	string head = get_string(str);
-	if (str == "begin")//¸Ã×Ö¶ÎÊÇ±íÊ¾À´Ô´ÊÇbegin
+	if (str == "begin")//è¯¥å­—æ®µæ˜¯è¡¨ç¤ºæ¥æºæ˜¯begin
 	{
 		vec.clear();
 		vec.push_back(0);
@@ -524,7 +530,7 @@ vector<int> ConfigParse::fgfield2(string& str)
 		vec.push_back(0);
 		return vec;
 	}
-	if (head == "pe")//¸Ã×Ö¶ÎÊÇ±íÊ¾À´Ô´ÊÇPE
+	if (head == "pe")//è¯¥å­—æ®µæ˜¯è¡¨ç¤ºæ¥æºæ˜¯PE
 	{
 		string::size_type pos;
 		string dot_b, dot_a;
@@ -547,7 +553,7 @@ vector<int> ConfigParse::fgfield2(string& str)
 		}
 
 	}
-	else if (head == "lbegin"||head == "lend"||head == "join"||head == "switch"||head == "break"||head == "lends")//¸Ã×Ö¶ÎÊÇ±íÊ¾À´Ô´ÊÇFG
+	else if (head == "lbegin"||head == "lend"||head == "join"||head == "switch"||head == "break"||head == "lends")//è¯¥å­—æ®µæ˜¯è¡¨ç¤ºæ¥æºæ˜¯FG
 	{
 		string::size_type pos1, pos2;
 		string dot_b, dot_a, categroy;
@@ -616,7 +622,7 @@ vector<int> ConfigParse::fgfield3(string& str)
 {
 	vector<int> vec;
 	string head = get_string(str);
-	if (str == "begin")//¸Ã×Ö¶ÎÊÇ±íÊ¾À´Ô´ÊÇbegin
+	if (str == "begin")//è¯¥å­—æ®µæ˜¯è¡¨ç¤ºæ¥æºæ˜¯begin
 	{
 		vec.clear();
 		vec.push_back(0);
@@ -624,7 +630,7 @@ vector<int> ConfigParse::fgfield3(string& str)
 		vec.push_back(0);
 		return vec;
 	}
-	if (head == "pe")//±íÊ¾À´Ô´ÊÇPE
+	if (head == "pe")//è¡¨ç¤ºæ¥æºæ˜¯PE
 	{
 		string::size_type pos;
 		string dot_b, dot_a;
@@ -641,13 +647,13 @@ vector<int> ConfigParse::fgfield3(string& str)
 			ss2 >> num2;
 			vec.clear();
 			vec.push_back(num1);
-			vec.push_back(num2 - 1);//portÒª¼õ1
+			vec.push_back(num2 - 1);//portè¦å‡1
 			vec.push_back(1);
 			return vec;
 		}
 
 	}
-	else if (head == "lbegin"||head == "lend"||head == "join"||head == "switch"||head == "break"||head == "lends")//¸Ã×Ö¶ÎÊÇ±íÊ¾À´Ô´ÊÇFG
+	else if (head == "lbegin"||head == "lend"||head == "join"||head == "switch"||head == "break"||head == "lends")//è¯¥å­—æ®µæ˜¯è¡¨ç¤ºæ¥æºæ˜¯FG
 	{
 		string::size_type pos1, pos2;
 		string dot_b, dot_a, categroy;
@@ -725,7 +731,7 @@ vector<int> ConfigParse::fgfieldo(string& str)
 {
 	vector<int> vec;
 	string head = get_string(str);
-	if (str == "begin")//¸Ã×Ö¶ÎÊÇ±íÊ¾À´Ô´ÊÇbegin
+	if (str == "begin")//è¯¥å­—æ®µæ˜¯è¡¨ç¤ºæ¥æºæ˜¯begin
 	{
 		vec.clear();
 		vec.push_back(0);
@@ -733,7 +739,7 @@ vector<int> ConfigParse::fgfieldo(string& str)
 		vec.push_back(0);
 		return vec;
 	}
-	if (head == "pe")//±íÊ¾À´Ô´ÊÇPE
+	if (head == "pe")//è¡¨ç¤ºæ¥æºæ˜¯PE
 	{
 		string::size_type pos;
 		string dot_b, dot_a;
@@ -750,13 +756,13 @@ vector<int> ConfigParse::fgfieldo(string& str)
 			ss2 >> num2;
 			vec.clear();
 			vec.push_back(num1);
-			vec.push_back(num2 - 1);//portÒª¼õ1
+			vec.push_back(num2 - 1);//portè¦å‡1
 			vec.push_back(1);
 			return vec;
 		}
 
 	}
-	//else if (str[0] == 'f')//±íÊ¾À´Ô´ÊÇFG
+	//else if (str[0] == 'f')//è¡¨ç¤ºæ¥æºæ˜¯FG
 	//{
 	//	const char dot = '.';
 	//	const char _line = '_';
@@ -767,8 +773,8 @@ vector<int> ConfigParse::fgfieldo(string& str)
 	//	pos_ = str.find(_line);
 	//	if (pos_dot != string::npos && pos_ != string::npos)
 	//	{
-	//		str_tmp1 = str.substr(pos_dot + 1, pos_ - pos_dot - 1);//ÏÂ»®ÏßÖ®Ç°dotÖ®ºó
-	//		str_tmp2 = str.substr(pos_ + 1);//ÏÂ»®ÏßÖ®ºó
+	//		str_tmp1 = str.substr(pos_dot + 1, pos_ - pos_dot - 1);//ä¸‹åˆ’çº¿ä¹‹å‰dotä¹‹å
+	//		str_tmp2 = str.substr(pos_ + 1);//ä¸‹åˆ’çº¿ä¹‹å
 	//		str_tmp3 = str.substr(2, pos_dot - 2);
 	//		stringstream ss1(str_tmp1); stringstream ss2(str_tmp2); stringstream ss3(str_tmp3);
 	//		ss1 >> aa; ss2 >> bb; ss3 >> cc;
@@ -795,80 +801,80 @@ vector<int> ConfigParse::fgfieldo(string& str)
 
 	}
 }
-//×Ö¶ÎÕûÌå½âÎö
+//å­—æ®µæ•´ä½“è§£æ
 void ConfigParse::configVec2parsed()
 {
 	string head_;
 	for (unsigned int it1 = 0; it1 < vec_config_ori.size(); it1++)
 	{
 		head_ = get_string(vec_config_ori[it1][0]);
-		//PEµÄ½âÎö
+		//PEçš„è§£æ
 		if (head_ == "pe")
 		{
 			pair<int,int> p_return;
 			int f_return;
 			bool b_return;
 			vector<int> v_return1, v_return2, v_return3;
-			//×Ö¶Î1
+			//å­—æ®µ1
 			p_return = pefield1(vec_config_ori[it1][0]);
-			vec_config_parsed[it1].push_back(p_return.first);		//vec_config_parsedÀïÃæ´æ´¢ µÄ¶¼ÊÇÒ»ĞĞĞĞµÄÊı×Ö»¯µÄĞÅÏ¢
+			vec_config_parsed[it1].push_back(p_return.first);		//vec_config_parsedé‡Œé¢å­˜å‚¨ çš„éƒ½æ˜¯ä¸€è¡Œè¡Œçš„æ•°å­—åŒ–çš„ä¿¡æ¯
 			vec_config_parsed[it1].push_back(p_return.second);	
-			//×Ö¶Î2
+			//å­—æ®µ2
 			f_return = pefield2(vec_config_ori[it1][1]);
 			vec_config_parsed[it1].push_back(f_return);
-			//×Ö¶Î3
+			//å­—æ®µ3
 			v_return1 = pefield3_4_5(vec_config_ori[it1][2]);
 			vec_config_parsed[it1].push_back(v_return1[0]);
 			vec_config_parsed[it1].push_back(v_return1[1]);
 			vec_config_parsed[it1].push_back(v_return1[2]);
 			v_return1.clear();
-			//×Ö¶Î4
+			//å­—æ®µ4
 			v_return2 = pefield3_4_5(vec_config_ori[it1][3]);
 			vec_config_parsed[it1].push_back(v_return2[0]);
 			vec_config_parsed[it1].push_back(v_return2[1]);
 			vec_config_parsed[it1].push_back(v_return2[2]);
 			v_return2.clear();
-			//×Ö¶Î5
+			//å­—æ®µ5
 			v_return3 = pefield3_4_5(vec_config_ori[it1][4]);
 			vec_config_parsed[it1].push_back(v_return3[0]);
 			vec_config_parsed[it1].push_back(v_return3[1]);
 			vec_config_parsed[it1].push_back(v_return3[2]);
 			v_return3.clear();
-			//×Ö¶Î6
+			//å­—æ®µ6
 			f_return = pefield6(vec_config_ori[it1][5]);
 			vec_config_parsed[it1].push_back(f_return);
-			//×Ö¶Î7
+			//å­—æ®µ7
 			f_return = pefield7(vec_config_ori[it1][6]);
 			vec_config_parsed[it1].push_back(f_return);
-			//×Ö¶Î8
+			//å­—æ®µ8
 			f_return = pefield8(vec_config_ori[it1][7]);
 			vec_config_parsed[it1].push_back(f_return);
-			//×Ö¶Î9
+			//å­—æ®µ9
 			f_return = pefield9(vec_config_ori[it1][8]);
 			vec_config_parsed[it1].push_back(f_return);
-			//×Ö¶Î10
+			//å­—æ®µ10
 			f_return = pefield10(vec_config_ori[it1][9]);
 			vec_config_parsed[it1].push_back(f_return);
-			//×Ö¶Î11
+			//å­—æ®µ11
 			f_return = pefield11(vec_config_ori[it1][10]);
 			vec_config_parsed[it1].push_back(f_return);
-			//×Ö¶Î12
+			//å­—æ®µ12
 			f_return = pefield12(vec_config_ori[it1][11]);
 			vec_config_parsed[it1].push_back(f_return);
-			//×Ö¶Î13
+			//å­—æ®µ13
 			b_return = pefield13(vec_config_ori[it1][12]);
 			vec_config_parsed[it1].push_back(b_return);
-			//×Ö¶Î14
+			//å­—æ®µ14
 			b_return = pefield14_15_16(vec_config_ori[it1][13]);
 			vec_config_parsed[it1].push_back(b_return);
-			//×Ö¶Î15
+			//å­—æ®µ15
 			b_return = pefield14_15_16(vec_config_ori[it1][14]);
 			vec_config_parsed[it1].push_back(b_return);
-			//×Ö¶Î16
+			//å­—æ®µ16
 			b_return = pefield14_15_16(vec_config_ori[it1][15]);
 			vec_config_parsed[it1].push_back(b_return);
 		}
-		//le×Ö¶Î½âÎö
+		//leå­—æ®µè§£æ
 		else if (head_ == "le")
 		{
 			vector<int> v_tmp_tmp;
@@ -881,7 +887,7 @@ void ConfigParse::configVec2parsed()
 			v_tmp_tmp.clear();
 			vec_config_parsed[it1].push_back(lefield3(vec_config_ori[it1][2]));
 		}
-		//se×Ö¶Î½âÎö
+		//seå­—æ®µè§£æ
 		else if (head_ == "se")
 		{
 			vector<int> v_tmp_tmp;
@@ -901,7 +907,7 @@ void ConfigParse::configVec2parsed()
 			vec_config_parsed[it1].push_back(sefield4(vec_config_ori[it1][3]));
 
 		}
-		//fg×Ö¶Î½âÎö
+		//fgå­—æ®µè§£æ
 		else if (head_ == "lbegin"||head_ == "lend"||head_ == "join"||head_ == "switch"||head_ == "break"||head_ == "lends" || head_ == "joinbp")
 		{
 			pair<int, int> return_tmp;
@@ -909,7 +915,7 @@ void ConfigParse::configVec2parsed()
 			return_tmp = fgfield1(vec_config_ori[it1][0]);
 			vec_config_parsed[it1].push_back(return_tmp.first);
 			vec_config_parsed[it1].push_back(return_tmp.second);
-			if (vec_config_ori[it1].size() == 3)//Ö»ÓĞÈı¸ö×Ö¶Î£¬¼õÈ¥Á½¸öÎŞÓÃ×Ö¶Î(category+index and tagmode)£¬±íÊ¾¸ÃÏ¸Á£¶Èµ¥ÔªÖ»ÓĞÒ»¸öÊäÈë
+			if (vec_config_ori[it1].size() == 3)//åªæœ‰ä¸‰ä¸ªå­—æ®µï¼Œå‡å»ä¸¤ä¸ªæ— ç”¨å­—æ®µ(category+index and tagmode)ï¼Œè¡¨ç¤ºè¯¥ç»†ç²’åº¦å•å…ƒåªæœ‰ä¸€ä¸ªè¾“å…¥
 			{
 				f_return1.clear();
 				f_return1 = fgfield2(vec_config_ori[it1][1]);
@@ -917,7 +923,7 @@ void ConfigParse::configVec2parsed()
 				vec_config_parsed[it1].push_back(f_return1[1]);
 				vec_config_parsed[it1].push_back(f_return1[2]);
 			}
-			else if (vec_config_ori[it1].size() == 4)//ÓĞÈı¸ö×Ö¶Î£¬±íÊ¾¸ÃÏ¸Á£¶Èµ¥ÔªÓĞÁ½¸öÊäÈë
+			else if (vec_config_ori[it1].size() == 4)//æœ‰ä¸‰ä¸ªå­—æ®µï¼Œè¡¨ç¤ºè¯¥ç»†ç²’åº¦å•å…ƒæœ‰ä¸¤ä¸ªè¾“å…¥
 			{
 				f_return1.clear();
 				f_return1 = fgfield2(vec_config_ori[it1][1]);
@@ -932,7 +938,7 @@ void ConfigParse::configVec2parsed()
 			}
 			else
 			{
-				//²»Ö¹Èı¸ö×Ö¶Î£¬Õë¶Ôjoin½Úµã²»¶¨ÊäÈëµÄÇé¿ö
+				//ä¸æ­¢ä¸‰ä¸ªå­—æ®µï¼Œé’ˆå¯¹joinèŠ‚ç‚¹ä¸å®šè¾“å…¥çš„æƒ…å†µ
 				int port_size = vec_config_ori[it1].size() - 2;
 				for (int i = 0; i < port_size; i++)
 				{
@@ -946,7 +952,7 @@ void ConfigParse::configVec2parsed()
 			}
 			vec_config_parsed[it1].push_back(fgfield4(vec_config_ori[it1].back()));
 		}
-		//ta×Ö¶Î½âÎö
+		//taå­—æ®µè§£æ
 		else if(head_ == "ta")
 		{
 			pair<int, int> return_tmp;
@@ -997,7 +1003,7 @@ pair<int, int> ConfigParse::tafield1(string& str)
 vector<int> ConfigParse::tafield2(string& str)
 {
 	string head = get_string(str);
-	if (head == "pe")//À´Ô´×ÔPE
+	if (head == "pe")//æ¥æºè‡ªPE
 	{
 		string::size_type pos;
 		string dot_b, dot_a;
@@ -1020,7 +1026,7 @@ vector<int> ConfigParse::tafield2(string& str)
 		}
 		
 	}
-	else if (head == "le")//À´Ô´×ÔLE
+	else if (head == "le")//æ¥æºè‡ªLE
 	{
 		vector<int> vec;
 		string tmp;
@@ -1031,11 +1037,11 @@ vector<int> ConfigParse::tafield2(string& str)
 		ss1 >> num1;
 		vec.clear();
 		vec.push_back(num1);
-		vec.push_back(0);//LEÃ»ÓĞ¶Ë¿Ú£¬Ê¹ÓÃ0À´±íÊ¾Ä¬ÈÏ
+		vec.push_back(0);//LEæ²¡æœ‰ç«¯å£ï¼Œä½¿ç”¨0æ¥è¡¨ç¤ºé»˜è®¤
 		vec.push_back(10);
 		return vec;
 	}
-	//else if (str[0] == 'f' && str[1] == 'i')//±íÊ¾Ğü¿Õ,fin
+	//else if (str[0] == 'f' && str[1] == 'i')//è¡¨ç¤ºæ‚¬ç©º,fin
 	//{
 	//	vector<int> vec;
 	//	vec.clear();
@@ -1044,7 +1050,7 @@ vector<int> ConfigParse::tafield2(string& str)
 	//	vec.push_back(0);
 	//	return vec;
 	//}
-	else if (head == "lbegin"||head == "lend"||head == "join"||head == "switch"||head == "break"||head == "lends")//À´Ô´ÓÚfg
+	else if (head == "lbegin"||head == "lend"||head == "join"||head == "switch"||head == "break"||head == "lends")//æ¥æºäºfg
 	{
 		string::size_type pos1, pos2;
 		string dot_b, dot_a, categroy;
