@@ -183,7 +183,6 @@
   <ItemGroup>
     <Text Include="config_ori.txt" />
     <Text Include="config_ori_s.txt" />
-    <Text Include="config_static.txt" />
     <Text Include="DEBUG.txt" />
     <Text Include="DEBUG2.txt" />
     <Text Include="memoryInFile.txt" />

@@ -597,6 +597,39 @@ vector<int> ConfigParse::fgfield2(string& str)
 	}
 	else if (head == "se")//from se
 	{
+		const char dot = '.';
+		string::size_type pos = str.find(dot);
+		if (pos != string::npos)
+		{
+			string str_b = str.substr(2,pos-2);
+			string str_a = str.substr(pos + 1);
+			stringstream ss1(str_b);
+			stringstream ss2(str_a);
+			int index__b,index__a;
+			ss1 >> index__b;
+			ss2 >> index__a;
+			vec.clear();
+			vec.push_back(index__b);
+			vec.push_back(index__a - 1);
+			vec.push_back(9);
+			return vec;
+		}
+		else
+		{
+			string str_ = str.substr(2);
+			stringstream ss(str_);
+			int index__;
+			ss >> index__;
+			vec.clear();
+			vec.push_back(index__);
+			vec.push_back(0);
+			vec.push_back(9);
+			return vec;
+		}
+		
+	}
+	else if(head == "le")//from le
+	{
 		string str_ = str.substr(2);
 		stringstream ss(str_);
 		int index__;
@@ -604,11 +637,8 @@ vector<int> ConfigParse::fgfield2(string& str)
 		vec.clear();
 		vec.push_back(index__);
 		vec.push_back(0);
-		vec.push_back(9);
+		vec.push_back(10);
 		return vec;
-	}
-	else
-	{
 	}
 }
 
@@ -695,7 +725,40 @@ vector<int> ConfigParse::fgfield3(string& str)
 			return vec;
 		}
 	}
-	else if(head == "se")//from se
+	else if (head == "se")//from se
+	{
+		const char dot = '.';
+		string::size_type pos = str.find(dot);
+		if (pos != string::npos)
+		{
+			string str_b = str.substr(2, pos - 2);
+			string str_a = str.substr(pos + 1);
+			stringstream ss1(str_b);
+			stringstream ss2(str_a);
+			int index__b, index__a;
+			ss1 >> index__b;
+			ss2 >> index__a;
+			vec.clear();
+			vec.push_back(index__b);
+			vec.push_back(index__a - 1);
+			vec.push_back(9);
+			return vec;
+		}
+		else
+		{
+			string str_ = str.substr(2);
+			stringstream ss(str_);
+			int index__;
+			ss >> index__;
+			vec.clear();
+			vec.push_back(index__);
+			vec.push_back(0);
+			vec.push_back(9);
+			return vec;
+		}
+
+	}
+	else if (head == "le")//from le
 	{
 		string str_ = str.substr(2);
 		stringstream ss(str_);
@@ -704,12 +767,8 @@ vector<int> ConfigParse::fgfield3(string& str)
 		vec.clear();
 		vec.push_back(index__);
 		vec.push_back(0);
-		vec.push_back(9);
+		vec.push_back(10);
 		return vec;
-	}
-	else
-	{
-
 	}
 }
 
@@ -780,6 +839,39 @@ vector<int> ConfigParse::fgfieldo(string& str)
 	//}
 	else if (head == "se")//from se
 	{
+		const char dot = '.';
+		string::size_type pos = str.find(dot);
+		if (pos != string::npos)
+		{
+			string str_b = str.substr(2, pos - 2);
+			string str_a = str.substr(pos + 1);
+			stringstream ss1(str_b);
+			stringstream ss2(str_a);
+			int index__b, index__a;
+			ss1 >> index__b;
+			ss2 >> index__a;
+			vec.clear();
+			vec.push_back(index__b);
+			vec.push_back(index__a - 1);
+			vec.push_back(9);
+			return vec;
+		}
+		else
+		{
+			string str_ = str.substr(2);
+			stringstream ss(str_);
+			int index__;
+			ss >> index__;
+			vec.clear();
+			vec.push_back(index__);
+			vec.push_back(0);
+			vec.push_back(9);
+			return vec;
+		}
+
+	}
+	else if (head == "le")//from le
+	{
 		string str_ = str.substr(2);
 		stringstream ss(str_);
 		int index__;
@@ -787,12 +879,8 @@ vector<int> ConfigParse::fgfieldo(string& str)
 		vec.clear();
 		vec.push_back(index__);
 		vec.push_back(0);
-		vec.push_back(9);
+		vec.push_back(10);
 		return vec;
-	}
-	else
-	{
-
 	}
 }
 //×Ö¶ÎÕûÌå½âÎö

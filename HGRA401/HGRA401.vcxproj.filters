@@ -211,9 +211,6 @@
     <Text Include="config_ori_s.txt">
       <Filter>资源文件</Filter>
     </Text>
-    <Text Include="config_static.txt">
-      <Filter>资源文件</Filter>
-    </Text>
     <Text Include="memoryInFile.txt">
       <Filter>资源文件</Filter>
     </Text>

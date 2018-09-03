@@ -2745,7 +2745,7 @@ void JoinBpSimProcess(JoinBp* joinbp_current)
 	//data fetch
 	for (int i = 0; i < (int)inport_num; i++)
 	{
-		
+		//from pe
 		if (joinbp_current->config_reg.front()[4 + i * 3] == 1)//from PE
 		{
 			auto in_from_index = joinbp_current->config_reg.front()[2 + i * 3];
@@ -2770,6 +2770,37 @@ void JoinBpSimProcess(JoinBp* joinbp_current)
 					joinbp_current->inputCollect[i] = pe[in_from_index]->ack2in2port;
 				}				
 			}
+		}
+		//from se
+		else if (joinbp_current->config_reg.front()[4 + i * 3] == 9)
+		{
+			auto in_from_index = joinbp_current->config_reg.front()[2 + i * 3];			
+			if (joinbp_current->config_reg.front()[3 + i * 3] == 0)//port1
+			{
+				if (se[in_from_index]->ack2addr_source_node)
+				{
+					joinbp_current->inputCollect[i] = se[in_from_index]->ack2addr_source_node;
+				}
+			}
+			else if (joinbp_current->config_reg.front()[3 + i * 3] == 1)//port2
+			{
+				if (se[in_from_index]->ack2data_source_node)
+				{
+					joinbp_current->inputCollect[i] = se[in_from_index]->ack2data_source_node;
+				}
+			}
+		}
+		//from le
+		else if (joinbp_current->config_reg.front()[4 + i * 3] == 10)
+		{
+			auto in_from_index = joinbp_current->config_reg.front()[2 + i * 3];
+			if (joinbp_current->config_reg.front()[3 + i * 3] == 0)//port1
+			{
+				if (le[in_from_index]->ack2addrgen)
+				{
+					joinbp_current->inputCollect[i] = le[in_from_index]->ack2addrgen;
+				}
+			}			
 		}
 	}
 	//join opration
