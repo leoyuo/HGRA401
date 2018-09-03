@@ -492,6 +492,9 @@ void PeSimProcess(ProcessingElement* pe_current)
 		}
 		else if (mode == 3)//bypass and calculate
 		{
+			pe_sim_step3(pe_current);
+			pe_sim_step2(pe_current);
+			pe_sim_step1(pe_current);
 		}
 		else if (mode == 4)//transmit and calculate
 		{
@@ -1624,6 +1627,12 @@ void pe_sim_step3(ProcessingElement* pe_current)
 
 		else if (pe_current->config_reg.front()[15] == 3)//ob1 from in1
 		{
+			if (pe_current->alu_out_v)
+			{
+				pe_current->outbuffer1_in = pe_current->din1;
+				pe_current->outbuffer1_in_v = pe_current->din1_v;
+			}
+			
 		}
 		else if (pe_current->config_reg.front()[15] == 2)//ob1 from lr
 		{
@@ -1659,6 +1668,7 @@ void pe_sim_step3(ProcessingElement* pe_current)
 	if (pe_current->config_reg.front()[16])//ob2·ÇÐü¿Õ
 	{
 		pe_current->outbuffer2_in_tag = pe_current->inbuffer1_out_tag;
+
 		if (pe_current->config_reg.front()[16] == 1)//ob2 from alu
 		{
 			pe_current->outbuffer2_in = pe_current->alu_out;
@@ -1668,6 +1678,12 @@ void pe_sim_step3(ProcessingElement* pe_current)
 
 		else if (pe_current->config_reg.front()[16] == 3)//ob2 from in2
 		{
+			if (pe_current->alu_out_v)
+			{
+				pe_current->outbuffer2_in = pe_current->din2;
+				pe_current->outbuffer2_in_v = pe_current->din2_v;
+			}
+			
 		}
 		else if (pe_current->config_reg.front()[16] == 2)//ob2 from lr
 		{
