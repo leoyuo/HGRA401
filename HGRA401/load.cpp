@@ -1,8 +1,8 @@
-#include "load.h"
+ï»¿#include "load.h"
 
 using namespace HGRA;
 //using DRAMSim::LSUnit;
-
+//
 Load::Load() :data_out_v(0),ack2addrgen(0),load_success(0),
 ack(0),ack_from_data_demand_side(0){ le_table_buffer.resize(intablebuffer_depth);
 }
@@ -45,8 +45,8 @@ void Load::reset()
 
 void Load::addrInTableBuffer()
 {
-	ack2addrgen = 0;	//Ä¬ÈÏÖÜÆÚ¿ªÊ¼Ê±ackÏßÎªµÍµçÆ½
-	uint32 cnt = 0;		//ÓĞcnt¸ö±í¸ñĞĞÊÇ±»Õ¼¾İµÄ×´Ì¬
+	ack2addrgen = 0;	//é»˜è®¤å‘¨æœŸå¼€å§‹æ—¶ackçº¿ä¸ºä½ç”µå¹³
+	uint32 cnt = 0;		//æœ‰cntä¸ªè¡¨æ ¼è¡Œæ˜¯è¢«å æ®çš„çŠ¶æ€
 	for (int i = 0; i < le_table_buffer.size(); i++)
 	{
 		if (!le_table_buffer[i].valid)
@@ -72,7 +72,7 @@ void Load::addr_out_buffer()
 {
 	if (!le_addr_order.empty())
 	{
-		//½«Êı¾İ´ÓbufferÖĞÄÃ³öÀ´£¬×¼±¸ºÃ½»¸øL/S Unit
+		//å°†æ•°æ®ä»bufferä¸­æ‹¿å‡ºæ¥ï¼Œå‡†å¤‡å¥½äº¤ç»™L/S Unit
 		int le_buffer_id_loading = le_addr_order.front();
 		if (le_table_buffer[le_buffer_id_loading].valid)
 		{
@@ -102,7 +102,7 @@ void Load::data_in_buffer()
 }
 void Load::data_output_tag()
 {
-	//´ÓtableÖĞÄÃ³öÒ»ĞĞÊı¾İËÍµ½Êä³ö¶Ë¿ÚÉÏ
+	//ä»tableä¸­æ‹¿å‡ºä¸€è¡Œæ•°æ®é€åˆ°è¾“å‡ºç«¯å£ä¸Š
 	data_out_tag = le_table_buffer[le_lineOK_order.front()].tag;
 	data_out_v = 1;
 	data_out = le_table_buffer[le_lineOK_order.front()].data;	
@@ -127,11 +127,11 @@ void Load::LEcallback(uint addr, unsigned long long clk)
 
 void Load::callbackACK()
 {
-	ack = 1;//LSuint È¡Êı³É¹¦
+	ack = 1;//LSuint å–æ•°æˆåŠŸ
 }
 //void Load::access(uint ADDR, uint TAG, uint V, DRAMSim::LSUnit* lsp)
 //{
-//	//uint VµÄ²ÎÊı´«µİµÄÊ±ºòĞèÒªÊı¾İÀàĞÍÇ¿ÖÆ×ª»»  bool->unsigned int
+//	//uint Vçš„å‚æ•°ä¼ é€’çš„æ—¶å€™éœ€è¦æ•°æ®ç±»å‹å¼ºåˆ¶è½¬æ¢  bool->unsigned int
 //	bool trans_succss;
 //	trans_succss = lsp->AddTrans(ADDR, TAG, V);
 //}

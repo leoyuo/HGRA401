@@ -1,7 +1,7 @@
-#include "fineGrain.h"
+ï»¿#include "fineGrain.h"
 
 
-//LoopBegin½Úµã
+//LoopBeginèŠ‚ç‚¹
 LoopBegin::LoopBegin() :out_v(0) {}
 LoopBegin::~LoopBegin() {}
 
@@ -13,15 +13,15 @@ void LoopBegin::lbegin()
 		out = (~begin_in)&feedback_in;
 	}
 	else
-		cout << "Error!Á½ÊäÈë²»ÄÜÍ¬Ê±Îª1" << endl;
+		cout << "Error!ä¸¤è¾“å…¥ä¸èƒ½åŒæ—¶ä¸º1" << endl;
 }
 
-//Loop End½Úµã
+//Loop EndèŠ‚ç‚¹
 LoopEnd::LoopEnd():in1_v(0),in1(0),in2(0), out2back(0), out2end(0) {  }
 LoopEnd::~LoopEnd() {}
 void LoopEnd::lend()
 {
-	if (in1_v == 0)//²»Ö´ĞĞÈÎºÎ²Ù×÷
+	if (in1_v == 0)//ä¸æ‰§è¡Œä»»ä½•æ“ä½œ
 	{
 		if (in2 == 0)
 		{
@@ -30,7 +30,7 @@ void LoopEnd::lend()
 		}
 		else if (in2 == 1)
 		{
-			//cout << "loop end½ÚµãµÄÕâÖÖÊäÈëÄ£Ê½ÊÇ±»½ûÖ¹µÄ" << endl;
+			exit(0);//cout << "loop endèŠ‚ç‚¹çš„è¿™ç§è¾“å…¥æ¨¡å¼æ˜¯è¢«ç¦æ­¢çš„" << endl;
 		}		
 	}
 	else if (in1_v == 1 && in1 == 1)
@@ -52,23 +52,23 @@ void LoopEnd::lend()
 		if (in2 == 0)
 		{
 			out2back = 0;
-			out2end = 0;
+			out2end = 1;   //åº”è¿”å›end
+			in1_v = 0;    //åº”è¯¥æ¸…é›¶
 		}
-		else if (in2 = 1)
+		else if (in2 == 1)  //æ˜¯ç­‰å·
 		{
-			out2back = 0;
-			out2end = 1;
+			exit(0);//cout << "loop endèŠ‚ç‚¹çš„è¿™ç§è¾“å…¥æ¨¡å¼æ˜¯è¢«ç¦æ­¢çš„" << endl;
 		}
 	}	
 }
 
 
-//Join½Úµã, (pathJoin) 
+//JoinèŠ‚ç‚¹, (pathJoin) 
 Join::Join() { inputCollect.resize(joininportNums);
 }
 Join::~Join() {}
 
-void Join::join()//µ÷ÓÃÕâ¸öº¯ÊıÖ®Ç°Ò»¶¨ÒªÈ·±£inputCollectÕâ¸öÏòÁ¿±»´«ÈëÁË×îĞÂµÄÊı¾İ
+void Join::join()//è°ƒç”¨è¿™ä¸ªå‡½æ•°ä¹‹å‰ä¸€å®šè¦ç¡®ä¿inputCollectè¿™ä¸ªå‘é‡è¢«ä¼ å…¥äº†æœ€æ–°çš„æ•°æ®
 {
 	 vector<bool>::size_type size_in = inputCollect.size();
 	bool out_init = inputCollect[0] & inputCollect[1];
@@ -80,7 +80,25 @@ void Join::join()//µ÷ÓÃÕâ¸öº¯ÊıÖ®Ç°Ò»¶¨ÒªÈ·±£inputCollectÕâ¸öÏòÁ¿±»´«ÈëÁË×îĞÂµÄÊ
 	ismergeFinished = 1;
 
 }
-//breakBp½Úµã
+//ShitèŠ‚ç‚¹
+Shit::Shit() {
+	inputCollect.resize(shitinportNums);
+}
+Shit::~Shit() {}
+
+void Shit::shit()//è°ƒç”¨è¿™ä¸ªå‡½æ•°ä¹‹å‰ä¸€å®šè¦ç¡®ä¿inputCollectè¿™ä¸ªå‘é‡è¢«ä¼ å…¥äº†æœ€æ–°çš„æ•°æ®
+{
+	vector<bool>::size_type size_in = inputCollect.size();
+	bool out_init = inputCollect[0] | inputCollect[1];
+	for (unsigned int i = 2; i < size_in; i++)
+	{
+		out_init = out_init | inputCollect[i];
+	}
+	out = out_init;
+	ismergeFinished = 1;
+
+}
+//breakBpèŠ‚ç‚¹
 JoinBp::JoinBp() {}
 JoinBp::~JoinBp() {}
 void JoinBp::join()
@@ -94,7 +112,7 @@ void JoinBp::join()
 	out = out_init;
 }
 
-//Switch½Úµã,(switch point)
+//SwitchèŠ‚ç‚¹,(switch point)
 Switch::Switch():in_v(0),in(0),out1(0),out2(0) { }
 Switch::~Switch() {}
 void Switch::path_select()
@@ -153,9 +171,9 @@ void Switch::path_select_tag()
 //{
 //	if (in1_v)
 //	{
-//		if (in2)//in1,in2Í¬Ê±Îª¸ßµçÆ½
+//		if (in2)//in1,in2åŒæ—¶ä¸ºé«˜ç”µå¹³
 //		{
-//			//cout << "ERROR!²»ÄÜÍ¬Ê±³öÏÖ" << endl;
+//			//cout << "ERROR!ä¸èƒ½åŒæ—¶å‡ºç°" << endl;
 //			out_v = 0;
 //		}
 //		else if (!in2)
@@ -190,7 +208,7 @@ void Switch::path_select_tag()
 
 
 
-//LoopEnds½Úµã
+//LoopEndsèŠ‚ç‚¹
 LoopEnds::LoopEnds():compare_in_v(0),break_in_v(0) {  }
 LoopEnds::~LoopEnds() {}
 void LoopEnds::loopends()
@@ -260,7 +278,7 @@ void LoopEnds::loopends()
 
 
 
-//Break½Úµã
+//BreakèŠ‚ç‚¹
 Break::Break():from_break_path(0),from_join_path(0) { }
 Break::~Break() {}
 void Break::mergeBreak()
