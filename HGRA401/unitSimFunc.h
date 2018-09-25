@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "processingElement.h"
 #include "load.h"
 #include "store.h"
@@ -29,26 +29,28 @@ extern LoopBegin** lbegin;
 extern LoopEnd** lend ;
 extern Switch** switch_;
 extern Join** join;
+//extern Shit** shit;
 extern JoinBp** joinbp;
 extern Break** break_ ;
 extern LoopEnds** lends;
 extern TagAttach** ta ;
 //extern TagIssue* tagissue;
 extern MemoryInt memory;
-extern MemoryInt memory2;//Ğ´½á¹ûµÄmemory
+extern MemoryInt memory2;//å†™ç»“æœçš„memory
 extern bool begin_signal;
 extern ofstream outfile;
 extern ofstream outfile2;
 extern vector<vector<int>> vec_config_parsed_tmp;
 extern vector<vector<int>> pe_port_fanout;
 
-void PeSimProcess(ProcessingElement* pe_current);//index ÊÇvec_config_parsedµÄË÷ÒıÖµ£¬ÓÃÀ´±íÊ¾µ±Ç°·ÂÕæµÄ¾ßÌå½ø¶È
+void PeSimProcess(ProcessingElement* pe_current);//index æ˜¯vec_config_parsedçš„ç´¢å¼•å€¼ï¼Œç”¨æ¥è¡¨ç¤ºå½“å‰ä»¿çœŸçš„å…·ä½“è¿›åº¦
 void LeSimProcess(Load* le_current,LSUnit* lsunit);
 void SeSimProcess(Store* se_current,LSUnit* lsunit);
 //Finegrained
 void LbeginSimProcess(LoopBegin* lbegin_current);
 void LendSimProcess(LoopEnd* lend_current);
 void JoinSimProcess(Join* join_current);
+void ShitSimProcess(Shit* shit_current);
 void JoinBpSimProcess(JoinBp* joinbp_current);
 void SwitchSimProcess(Switch* switch_current);
 void BreakSimProcess(Break* break_current);
@@ -62,9 +64,9 @@ void pe_sim_step1_mux(ProcessingElement* pe_current);
 void pe_sim_step2_mux(ProcessingElement* pe_current);
 void pe_sim_step3_mux(ProcessingElement* pe_current);
 //for no tag
-void pe_sim_step1_no_tag(ProcessingElement* pe_current);//Ö»Õë¶Ô¼ÆËãÄ£Ê½
-void pe_sim_step2_no_tag(ProcessingElement* pe_current);//Ö»Õë¶Ô¼ÆËãÄ£Ê½
-void pe_sim_step3_no_tag(ProcessingElement* pe_current);//Ö»Õë¶Ô¼ÆËãÄ£Ê½
+void pe_sim_step1_no_tag(ProcessingElement* pe_current);//åªé’ˆå¯¹è®¡ç®—æ¨¡å¼
+void pe_sim_step2_no_tag(ProcessingElement* pe_current);//åªé’ˆå¯¹è®¡ç®—æ¨¡å¼
+void pe_sim_step3_no_tag(ProcessingElement* pe_current);//åªé’ˆå¯¹è®¡ç®—æ¨¡å¼
 
 //void le_sim_step1(Load* le_current);
 //void le_sim_step2(Load* le_current);

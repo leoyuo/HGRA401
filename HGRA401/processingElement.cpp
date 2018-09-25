@@ -1,4 +1,5 @@
 ﻿#include "processingElement.h"
+#include <cmath>
 
 
 ProcessingElement::ProcessingElement():dout1_v(0),dout2_v(0),bout_v(0),loc_reg_v(0) {}
@@ -41,30 +42,24 @@ void ProcessingElement::ALU(int opcode, int in1, int in2 ,bool for_mux)//ALU作�
 			alu_out = in1 - in2;
 			alu_out_v = 1;
 			break;
+
 		case 4://div
 			alu_out = in1 / in2;
 			alu_out_v = 1;
 			break;
 
-<<<<<<< HEAD
+		case 5://mod
+			alu_out = in1 % in2;
+			alu_out_v = 1;
+			break;
+
 		case 6: //判断两输入的大小
-=======
-		case 4://div
-			alu_out = in1 / in2;
-			alu_out_v = 1;
-			break;
-
-		case 6: //�ж�������Ĵ�С
->>>>>>> upstream/master
 			alu_out_b = in1 < in2 ? 1 : 0;
 			alu_out_b_v = 1;
 			break;
 		case  7:
 			alu_out = in1 == in2 ? 1 : 0;//输出较小的值
 			alu_out_v = 1;
-			break;
-		case 8:
-
 			break;
 
 		case 9://MAC
@@ -76,21 +71,26 @@ void ProcessingElement::ALU(int opcode, int in1, int in2 ,bool for_mux)//ALU作�
 			alu_out = in1 << in2;
 			alu_out_v = 1;
 			break;
-<<<<<<< HEAD
-
-=======
->>>>>>> upstream/master
 		case 13://rishift
 			alu_out = in1 >> in2;
 			alu_out_v = 1;
 			break;
-<<<<<<< HEAD
-
-=======
->>>>>>> upstream/master
-		case 14://or
+		case 14:// and
+			alu_out = in1 & in2;
+			alu_out_v = 1;
+			break;
+		case 15: //or
 			alu_out = in1 | in2;
 			alu_out_v = 1;
+			break;
+		case 16: //cos
+			alu_out = cos(in1);
+			alu_out_v = 1;
+			break;
+		case 17: //sin
+			alu_out = sin(in1);
+			alu_out_v = 1;
+			break;
 		}
 	}
 	
@@ -183,8 +183,8 @@ void ProcessingElement::inBufferOutCtr1()
 		inBuffer1.dataOut();
 		inbuffer1_out = inBuffer1.out;		
 	}
-	else
-		cout << "inputBuffer1是空的" << endl;
+	//else
+		//cout << "inputBuffer1是空的" << endl;
 
 	
 
@@ -197,8 +197,8 @@ void ProcessingElement::inBufferOutCtr2()
 		inBuffer2.dataOut();
 		inbuffer2_out = inBuffer2.out;		
 	}
-	else
-		cout << "inputBuffer2是空的" << endl;
+	//else
+		//cout << "inputBuffer2是空的" << endl;
 	
 
 }
@@ -433,11 +433,7 @@ bool InTableBuffer::line_ok(vector<TableLine>::size_type i,ProcessingElement* pe
 	{
 		if (pe->config_reg.front()[2] == 8)//MUX操作
 		{
-<<<<<<< HEAD
-			if (InTableBufferEntity[i].valid3 & InTableBufferEntity[i].data3)// valid3=1;data3=0,选择in2
-=======
-			if (InTableBufferEntity[i].valid3 & !InTableBufferEntity[i].data3)// valid3=1;data3=0,ѡ��in2
->>>>>>> upstream/master
+			if (InTableBufferEntity[i].valid3 & !InTableBufferEntity[i].data3)// valid3=1;data3=0,选择in2
 			{
 				if (InTableBufferEntity[i].valid2)
 				{

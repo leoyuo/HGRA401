@@ -71,8 +71,14 @@ int ConfigParse::pefield2(string& str)		//[opcode]
 		return 12;
 	else if (str == "rishift")
 		return 13;
-	else if (str == "or")
+	else if (str == "and")
 		return 14;
+	else if (str == "or")
+		return 15;
+	else if (str == "cos")
+		return 16;
+	else if (str == "sin")
+		return 17;
 	else
 	{
 		//cout << "no opcode matched!" << endl;
@@ -512,6 +518,8 @@ pair<int, int> ConfigParse::fgfield1(string& str)
 		category = 6;
 	else if (str_tmp1 == "joinbp")
 		category = 10;
+	else if (str_tmp1 == "shit")
+		category = 11;
 
 	out.first = category;
 	out.second = index;
@@ -592,12 +600,16 @@ vector<int> ConfigParse::fgfield2(string& str)
 			{
 				num3 = 7;
 			}
+			else if (categroy == "shit")
+			{
+				num3 = 11;
+			}
 			ss1 >> num1;
 			ss2 >> num2;
 			vec.clear();
 			vec.push_back(num1);
 			vec.push_back(num2 - 1);
-			vec.push_back(1);
+			vec.push_back(num3);
 			return vec;
 		}
 	}

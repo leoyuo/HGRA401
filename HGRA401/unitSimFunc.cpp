@@ -40,7 +40,7 @@ void PeSimProcess(ProcessingElement* pe_current)
 				}
 				else
 				{
-					cout << "上一个PE输出的数没有valid." << endl;
+					//cout << "上一个PE输出的数没有valid." << endl;
 					//pe_current->in1_v = 0;
 				}
 			}
@@ -54,7 +54,7 @@ void PeSimProcess(ProcessingElement* pe_current)
 				}
 				else
 				{
-					cout << "上一个PE输出的数没有valid." << endl;
+					//cout << "上一个PE输出的数没有valid." << endl;
 					//pe_current->in1_v = 0;
 				}
 
@@ -70,7 +70,7 @@ void PeSimProcess(ProcessingElement* pe_current)
 			}
 			else
 			{
-				cout << "上一个LE输出的数据没有valid" << endl;
+				//cout << "上一个LE输出的数据没有valid" << endl;
 				//pe_current->in1_v = 0;
 
 			}
@@ -96,7 +96,7 @@ void PeSimProcess(ProcessingElement* pe_current)
 	}
 	else
 	{
-		cout << "PE[" << pe_index_current << "]的输入1悬空" << endl;
+		//cout << "PE[" << pe_index_current << "]的输入1悬空" << endl;
 		pe_current->din1 = 0;
 		pe_current->din1_v = 0;
 		pe_current->din1_tag = 0;
@@ -117,12 +117,13 @@ void PeSimProcess(ProcessingElement* pe_current)
 				}
 				else
 				{
-					cout << "上一个PE输出的数没有valid." << endl;
+					//cout << "上一个PE输出的数没有valid." << endl;
 					//pe_current->in2_v = 0;
 				}
 
 			}
-			else if (din1_from_port == 1)//上一个PE的port2
+			//！！此处是 din2 !!不是din1！！
+			else if (din2_from_port == 1)//上一个PE的port2
 			{
 				if (pe[din2_from_index]->dout2_v)//data valid,fetch
 				{
@@ -132,7 +133,7 @@ void PeSimProcess(ProcessingElement* pe_current)
 				}
 				else
 				{
-					cout << "上一个PE输出的数没有valid." << endl;
+					//cout << "上一个PE输出的数没有valid." << endl;
 					//pe_current->in2_v = 0;
 				}
 			}
@@ -148,7 +149,7 @@ void PeSimProcess(ProcessingElement* pe_current)
 			else
 			{
 				//pe_current->in2_v = 0;
-				cout << "上一个LE输出的数据没有valid" << endl;
+				//cout << "上一个LE输出的数据没有valid" << endl;
 			}
 		}
 		else if (din2_from_flag == 3) //输入来自于lbegin
@@ -172,7 +173,7 @@ void PeSimProcess(ProcessingElement* pe_current)
 	}
 	else
 	{
-		cout << "PE的输入2悬空" << endl;
+		//cout << "PE的输入2悬空" << endl;
 		pe_current->din2 = 0;
 		pe_current->din2_v = 0;
 	}
@@ -190,7 +191,7 @@ void PeSimProcess(ProcessingElement* pe_current)
 				}
 				else
 				{
-					cout << "上一个PE的输出数据没有valid" << endl;
+					//cout << "上一个PE的输出数据没有valid" << endl;
 					//pe_current->in3_v = 0;
 				}
 
@@ -211,12 +212,12 @@ void PeSimProcess(ProcessingElement* pe_current)
 					pe_current->bin = pe[bin_from_index]->dout2_v;
 				}
 			}
-			else
-				cout << "error" << endl;
+			//else
+				//cout << "error" << endl;
 		}
 		else if (bin_from_flag == 1)//输入3来源自LE
 		{
-			cout << "PE的输入3不可能来自于LE，配置编写错误，请更改." << endl;
+			//cout << "PE的输入3不可能来自于LE，配置编写错误，请更改." << endl;
 		}
 		else if (bin_from_flag == 10)//from SE
 		{
@@ -233,25 +234,16 @@ void PeSimProcess(ProcessingElement* pe_current)
 		{
 			if (bin_from_port == 0)//lend的port2back
 			{
-<<<<<<< HEAD
-
-				pe_current->bin_v = lend[bin_from_index]->out2back;//使能信号从valid口进入																					   											
-=======
 				pe_current->bin = lend[bin_from_index]->out2back;
-				pe_current->bin_v = lend[bin_from_index]->out2back;//ʹ���źŴ�valid�ڽ���																					   											
->>>>>>> upstream/master
+				pe_current->bin_v = lend[bin_from_index]->out2back;//使能信号从valid口进入																					   											
 			}
 			else if (bin_from_port == 1)//FG2的port2end
 			{
-<<<<<<< HEAD
-				pe_current->bin_v = lend[bin_from_index]->out2end;//使能信号从valid口进入																					  												
-=======
 				pe_current->bin = lend[bin_from_index]->out2end;
-				pe_current->bin_v = lend[bin_from_index]->out2end;//ʹ���źŴ�valid�ڽ���																					  												
->>>>>>> upstream/master
+				pe_current->bin_v = lend[bin_from_index]->out2end;//使能信号从valid口进入																					  												
 			}
-			else
-				cout << "port 超出了范围" << endl;
+			//else
+				//cout << "port 超出了范围" << endl;
 		}
 		//else if (bin_from_flag == 6)//输入3来源自FG4
 		//{	//fg4的两位输出的功能是在初始值和累加值之间做选择的时候,没有valid信号的时候也是需要fetch,
@@ -264,7 +256,7 @@ void PeSimProcess(ProcessingElement* pe_current)
 		//		//pe_current->in3_2 = fg4[in3_from_pe_index]->out2;
 		//	}
 		//	else
-		//		cout << "上一个FG4的输出数据没有valid." << endl;
+		//		//cout << "上一个FG4的输出数据没有valid." << endl;
 		//}
 		else if (bin_from_flag == 5)//输入3来源自join
 		{
@@ -280,13 +272,15 @@ void PeSimProcess(ProcessingElement* pe_current)
 			{
 
 				pe_current->bin_v = switch_[bin_from_index]->out1;
+				pe_current->bin = switch_[bin_from_index]->out1;
 			}
 			else if (bin_from_port == 1)//switch的port2(right)
 			{
 				pe_current->bin_v = switch_[bin_from_index]->out2;
+				pe_current->bin = switch_[bin_from_index]->out2;
 			}
-			else
-				cout << "port 超出了范围" << endl;
+			//else
+				//cout << "port 超出了范围" << endl;
 		}
 		else if (bin_from_flag == 7)//输入3来源于break
 		{
@@ -296,7 +290,7 @@ void PeSimProcess(ProcessingElement* pe_current)
 		//......
 		else
 		{
-			cout << "超出了部件范围" << endl;
+			//cout << "超出了部件范围" << endl;
 		}
 	}
 	else
@@ -514,6 +508,7 @@ void PeSimProcess(ProcessingElement* pe_current)
 				if (pe_current->din2_v)
 				{
 					pe_current->loc_reg = pe_current->din2;
+					pe_current->din2_v;
 				}
 				pe_sim_step3(pe_current);
 				pe_sim_step2(pe_current);
@@ -525,6 +520,7 @@ void PeSimProcess(ProcessingElement* pe_current)
 				if (pe_current->din2_v)
 				{
 					pe_current->loc_reg = pe_current->din2;
+					pe_current->din2_v;
 				}
 				pe_sim_step3(pe_current);
 				pe_sim_step2(pe_current);
@@ -631,6 +627,16 @@ void PeSimProcess(ProcessingElement* pe_current)
 					pe_current->bin = 0;
 				}
 			}
+			//检测是否是end节点
+			if (pe_current->config_reg.front()[17])
+			{
+				if (pe_current->dout1_v | pe_current->dout2_v)
+				{
+					pe_current->bout = 1;
+					pe_current->bout_v = 1;//使用out3_v出口作为end节点信号的出口（要在out3口没有被使用的情况下才能成立）
+				}
+
+			}
 			//输入
 			if (pe_current->din1_v)
 			{
@@ -722,14 +728,7 @@ void PeSimProcess(ProcessingElement* pe_current)
 				pe_sim_step2_no_tag(pe_current);
 				pe_sim_step1_no_tag(pe_current);				
 			}
-			// -------1-------------2----3---------4----------5------6--------7----------8----------9-- 
-			//out数据的valid位置0->lr4,lr5入数->inBuffer入数->出数->ALU计算->lr1入数->outBuffer入数->出数				
-			else if (is_din1_float == 0 && is_din2_float != 0 && is_bin_float == !0)//011
-			{
-				pe_sim_step3_no_tag(pe_current);
-				pe_sim_step2_no_tag(pe_current);
-				pe_sim_step1_no_tag(pe_current);
-			}
+
 			// -------1-------------2----3---------4----------5------6--------7----------8----------9-- 
 			//out数据的valid位置0->lr4,lr5入数->inBuffer入数->出数->ALU计算->lr1入数->outBuffer入数->出数	
 			else if (is_din1_float != 0 && is_din2_float == 0 && is_bin_float != 0)//101
@@ -794,7 +793,7 @@ void PeSimProcess(ProcessingElement* pe_current)
 			//......	
 			else
 			{
-				cout << "out of range." << endl;
+				//cout << "out of range." << endl;
 			}
 			//outfile << "PE的最终输出结果是out1：" << pe_current->out1 << endl;
 
@@ -804,7 +803,37 @@ void PeSimProcess(ProcessingElement* pe_current)
 		}
 		else if (mode == 3)//bypass and calculate
 		{
-
+			pe_sim_step3_no_tag(pe_current);
+			pe_sim_step2_no_tag(pe_current);
+			pe_sim_step1_no_tag(pe_current);
+		}
+		else if (mode == 4)//transmit and calculate
+		{
+			outfile << "pe[" << pe_index_current << "]处于计算+中转模式...." << endl;
+			if (is_din1_float != 0 && is_din2_float != 0 && is_bin_float != 0)// 111
+			{
+				//中转入数
+				if (pe_current->din2_v)
+				{
+					pe_current->loc_reg = pe_current->din2;
+					pe_current->din2_v = 0;
+				}
+				pe_sim_step3_no_tag(pe_current);
+				pe_sim_step2_no_tag(pe_current);
+				pe_sim_step1_no_tag(pe_current);
+			}
+			else if (is_din1_float != 0 && is_din2_float != 0 && is_bin_float == 0)// 110
+			{
+				//中转入数
+				if (pe_current->din2_v)
+				{
+					pe_current->loc_reg = pe_current->din2;
+					pe_current->din2_v = 0;
+				}
+				pe_sim_step3_no_tag(pe_current);
+				pe_sim_step2_no_tag(pe_current);
+				pe_sim_step1_no_tag(pe_current);
+			}
 		}
 		else if (mode == 5)//tag 绑定模式
 		{
@@ -880,19 +909,33 @@ void pe_sim_step3_no_tag(ProcessingElement* pe_current)
 
 		else if (pe_current->config_reg.front()[15] == 3)//ob1 from in1
 		{
+
 		}
 		else if (pe_current->config_reg.front()[15] == 2)//ob1 from lr
 		{
 			pe_current->outbuffer1_in = pe_current->loc_reg;
 			pe_current->outbuffer1_in_v = pe_current->loc_reg_v;
 		}
-		//入数、出数
+
+		//pe_current->outbuffer1_in_v = 1;
+		//有效开始入数出数
 		if (pe_current->outbuffer1_in_v)
 		{
-			pe_current->outBuffer1In();
-			pe_current->peExportCtr1();
+			//bac
+			if (pe_current->config_reg.front()[18] == 3)
+			{
+				if (pe_current->alu_out_v)
+				{
+					pe_current->outBuffer1In();
+					pe_current->peExportCtr1();
+				}
+			}
+			else
+			{
+				pe_current->outBuffer1In();
+				pe_current->peExportCtr1();
+			}	
 		}
-
 	}
 
 	if (pe_current->config_reg.front()[16])//ob2非悬空
@@ -906,6 +949,7 @@ void pe_sim_step3_no_tag(ProcessingElement* pe_current)
 
 		else if (pe_current->config_reg.front()[16] == 3)//ob2 from in2
 		{
+
 		}
 		else if (pe_current->config_reg.front()[16] == 2)//ob2 from lr
 		{
@@ -913,11 +957,25 @@ void pe_sim_step3_no_tag(ProcessingElement* pe_current)
 			pe_current->outbuffer2_in_v = pe_current->loc_reg_v;
 		}
 
-		//入数、出数
+
+		//pe_current->outbuffer2_in_v = 1;
+		//有效开始入数出数
 		if (pe_current->outbuffer2_in_v)
 		{
-			pe_current->outBuffer2In();
-			pe_current->peExportCtr2();
+			//bac
+			if (pe_current->config_reg.front()[18] == 3)
+			{
+				if (pe_current->alu_out_v)
+				{
+					pe_current->outBuffer2In();
+					pe_current->peExportCtr2();
+				}
+			}
+			else
+			{
+				pe_current->outBuffer2In();
+				pe_current->peExportCtr2();
+			}	
 		}
 
 	}
@@ -997,6 +1055,25 @@ void pe_sim_step2_no_tag(ProcessingElement* pe_current)
 		}
 
 	}
+	
+		//判断是否为BAC模式
+	if (pe_current->config_reg.front()[18] == 3)
+	{
+		if (pe_current->config_reg.front()[15] == 3)//ob1 from in1,将ob1直接传到outbuffer
+		{
+			pe_current->outbuffer1_in = pe_current->inbuffer1_out;
+			pe_current->outbuffer1_in_v = pe_current->inbuffer1_out_v;
+			pe_current->outbuffer1_in_tag = pe_current->inbuffer1_out_tag;
+		}
+		if (pe_current->config_reg.front()[16] == 3)//ob2 from in2，将ob2直接传到outbuffer2
+		{
+			pe_current->outbuffer2_in = pe_current->inbuffer2_out;
+			pe_current->outbuffer2_in_v = pe_current->inbuffer2_out_v;
+			pe_current->outbuffer2_in_tag = pe_current->inbuffer2_out_tag;
+		}
+	}
+	
+	
 	//alu运算
 	if (pe_current->config_reg.front()[2] == 8)//mux操作。特殊对待
 	{
@@ -1047,8 +1124,6 @@ void pe_sim_step2_no_tag(ProcessingElement* pe_current)
 			pe_current->inbuffer3_out_v = 0;
 		}
 	}
-	
-
 	
 	//lr 仿真
 	if (pe_current->config_reg.front()[12] == 1)	//lr from alu
@@ -1108,7 +1183,7 @@ void pe_sim_step1_no_tag(ProcessingElement* pe_current)
 	}
 	else
 	{
-		cout << "输入数据没有进入到inbuffer中" << endl;
+		//cout << "输入数据没有进入到inbuffer中" << endl;
 	}
 		
 	//inbuffer2
@@ -1137,7 +1212,7 @@ void pe_sim_step1_no_tag(ProcessingElement* pe_current)
 		
 	}
 	else
-		cout << "输入数据没有进入到inbuffer中" << endl;
+		//cout << "输入数据没有进入到inbuffer中" << endl;
 
 	//inbuffer3
 	if (pe_current->config_reg.front()[22] == 1)//输入连接到了inbuffer上
@@ -1163,8 +1238,8 @@ void pe_sim_step1_no_tag(ProcessingElement* pe_current)
 		}
 		
 	}
-	else
-		cout << "输入数据没有进入到inbuffer中" << endl;
+	//else
+		//cout << "输入数据没有进入到inbuffer中" << endl;
 	//inbuffer入数出数完成，清空入口数据
 	
 	
@@ -1236,11 +1311,7 @@ void pe_sim_step1(ProcessingElement* pe_current)
 		//数据进入tableBuffer之后才开始清数据
 		if (din1_from_port == 0)//port1
 		{
-<<<<<<< HEAD
-			if (port1_fanout_num <= 1)//没有一对多的情况
-=======
-			if (port1_fanout_num <= 1)//һ��һ�����
->>>>>>> upstream/master
+			if (port1_fanout_num <= 1)//一对一的情况
 			{
 				if (pe_current->ack2in1port)
 				{
@@ -1566,6 +1637,22 @@ void pe_sim_step2(ProcessingElement* pe_current)
 
 	}	
 	outfile << "PE[" << pe_current->config_reg.front()[1] << "] ALU的输入是：in1: " << pe_current->alu_in1 << " in2: " << pe_current->alu_in2 << endl;
+	//判断是否为BAC模式
+	if (pe_current->config_reg.front()[18] == 3)
+	{
+		if (pe_current->config_reg.front()[15] == 3)//ob1 from in1,将ob1直接传到outbuffer
+		{
+			pe_current->outbuffer1_in = pe_current->inbuffer1_out;
+			pe_current->outbuffer1_in_v = pe_current->inbuffer1_out_v;
+			pe_current->outbuffer1_in_tag = pe_current->inbuffer1_out_tag;
+		}
+		if (pe_current->config_reg.front()[16] == 3)//ob2 from in2，将ob2直接传到outbuffer2
+		{
+			pe_current->outbuffer2_in = pe_current->inbuffer2_out;
+			pe_current->outbuffer2_in_v = pe_current->inbuffer2_out_v;
+			pe_current->outbuffer2_in_tag = pe_current->inbuffer2_out_tag;
+		}
+	}
 	//执行计算
 	if (pe_current->alu_in1_v & pe_current->alu_in2_v)
 	{
@@ -1647,11 +1734,12 @@ void pe_sim_step3(ProcessingElement* pe_current)
 
 		else if (pe_current->config_reg.front()[15] == 3)//ob1 from in1
 		{
-			if (pe_current->alu_out_v)
+			/*if (pe_current->alu_out_v)
 			{
 				pe_current->outbuffer1_in = pe_current->din1;
 				pe_current->outbuffer1_in_v = pe_current->din1_v;
-			}
+
+			}*/
 			
 		}
 		else if (pe_current->config_reg.front()[15] == 2)//ob1 from lr
@@ -1668,19 +1756,43 @@ void pe_sim_step3(ProcessingElement* pe_current)
 		//有效开始入数出数
 		if (pe_current->outbuffer1_in_v)
 		{
-			//数据导入到outTableBuffer类中去
-			pe_current->outTableBuffer1.in = pe_current->outbuffer1_in;
-			pe_current->outTableBuffer1.in_v = pe_current->outbuffer1_in_v;
-			pe_current->outTableBuffer1.in_tag = pe_current->outbuffer1_in_tag;
-			//入数、出数
-			pe_current->outTableBuffer1.dataIn();
-			pe_current->outTableBuffer1.dataOut();
-			//数据从类中导出到PE
-			pe_current->dout1 = pe_current->outTableBuffer1.out;
-			pe_current->dout1_v = pe_current->outTableBuffer1.out_v;
-			pe_current->dout1_tag = pe_current->outTableBuffer1.out_tag;
-			//pe操作完成，子模块入口处的valid值清零
-			pe_current->outbuffer1_in_v = 0;			
+			if(pe_current->config_reg.front()[18] == 3)//bac模式
+				{
+					if (pe_current->alu_out_v)
+					{
+						//数据导入到outTableBuffer类中去
+						pe_current->outTableBuffer1.in = pe_current->outbuffer1_in;
+						pe_current->outTableBuffer1.in_v = pe_current->outbuffer1_in_v;
+						pe_current->outTableBuffer1.in_tag = pe_current->outbuffer1_in_tag;
+						//入数、出数
+						pe_current->outTableBuffer1.dataIn();
+						pe_current->outTableBuffer1.dataOut();
+						//数据从类中导出到PE
+						pe_current->dout1 = pe_current->outTableBuffer1.out;
+						pe_current->dout1_v = pe_current->outTableBuffer1.out_v;
+						pe_current->dout1_tag = pe_current->outTableBuffer1.out_tag;
+						//pe操作完成，子模块入口处的valid值清零
+						pe_current->outbuffer1_in_v = 0;
+					}
+				}
+			else
+			{
+				//数据导入到outTableBuffer类中去
+				pe_current->outTableBuffer1.in = pe_current->outbuffer1_in;
+				pe_current->outTableBuffer1.in_v = pe_current->outbuffer1_in_v;
+				pe_current->outTableBuffer1.in_tag = pe_current->outbuffer1_in_tag;
+				//入数、出数
+				pe_current->outTableBuffer1.dataIn();
+				pe_current->outTableBuffer1.dataOut();
+				//数据从类中导出到PE
+				pe_current->dout1 = pe_current->outTableBuffer1.out;
+				pe_current->dout1_v = pe_current->outTableBuffer1.out_v;
+				pe_current->dout1_tag = pe_current->outTableBuffer1.out_tag;
+				//pe操作完成，子模块入口处的valid值清零
+				pe_current->outbuffer1_in_v = 0;
+			}
+			
+					
 		}
 		
 	}
@@ -1698,11 +1810,11 @@ void pe_sim_step3(ProcessingElement* pe_current)
 
 		else if (pe_current->config_reg.front()[16] == 3)//ob2 from in2
 		{
-			if (pe_current->alu_out_v)
+			/*if (pe_current->alu_out_v)
 			{
 				pe_current->outbuffer2_in = pe_current->din2;
 				pe_current->outbuffer2_in_v = pe_current->din2_v;
-			}
+			}*/
 			
 		}
 		else if (pe_current->config_reg.front()[16] == 2)//ob2 from lr
@@ -1716,19 +1828,44 @@ void pe_sim_step3(ProcessingElement* pe_current)
 		//有效开始入数出数
 		if (pe_current->outbuffer2_in_v)
 		{
-			//数据导入到outTableBuffer类中去
-			pe_current->outTableBuffer2.in = pe_current->outbuffer2_in;
-			pe_current->outTableBuffer2.in_v = pe_current->outbuffer2_in_v;
-			pe_current->outTableBuffer2.in_tag = pe_current->outbuffer2_in_tag;
-			//入数、出数
-			pe_current->outTableBuffer2.dataIn();
-			pe_current->outTableBuffer2.dataOut();
-			//数据从类中导出到PE
-			pe_current->dout2 = pe_current->outTableBuffer2.out;
-			pe_current->dout2_v = pe_current->outTableBuffer2.out_v;
-			pe_current->dout2_tag = pe_current->outTableBuffer2.out_tag;
-			//pe操作完成，子模块入口处的valid值清零
-			pe_current->outbuffer2_in_v = 0;			
+			//bac
+			if (pe_current->config_reg.front()[18] == 3)
+			{
+				if (pe_current->alu_out_v)
+				{
+					//数据导入到outTableBuffer类中去
+					pe_current->outTableBuffer2.in = pe_current->outbuffer2_in;
+					pe_current->outTableBuffer2.in_v = pe_current->outbuffer2_in_v;
+					pe_current->outTableBuffer2.in_tag = pe_current->outbuffer2_in_tag;
+					//入数、出数
+					pe_current->outTableBuffer2.dataIn();
+					pe_current->outTableBuffer2.dataOut();
+					//数据从类中导出到PE
+					pe_current->dout2 = pe_current->outTableBuffer2.out;
+					pe_current->dout2_v = pe_current->outTableBuffer2.out_v;
+					pe_current->dout2_tag = pe_current->outTableBuffer2.out_tag;
+					//pe操作完成，子模块入口处的valid值清零
+					pe_current->outbuffer2_in_v = 0;
+				}
+			}
+			else
+			{
+				//数据导入到outTableBuffer类中去
+				pe_current->outTableBuffer2.in = pe_current->outbuffer2_in;
+				pe_current->outTableBuffer2.in_v = pe_current->outbuffer2_in_v;
+				pe_current->outTableBuffer2.in_tag = pe_current->outbuffer2_in_tag;
+				//入数、出数
+				pe_current->outTableBuffer2.dataIn();
+				pe_current->outTableBuffer2.dataOut();
+				//数据从类中导出到PE
+				pe_current->dout2 = pe_current->outTableBuffer2.out;
+				pe_current->dout2_v = pe_current->outTableBuffer2.out_v;
+				pe_current->dout2_tag = pe_current->outTableBuffer2.out_tag;
+				//pe操作完成，子模块入口处的valid值清零
+				pe_current->outbuffer2_in_v = 0;
+			}
+			
+				
 		}
 		
 	}
@@ -1747,21 +1884,22 @@ void pe_sim_step3(ProcessingElement* pe_current)
 		}
 		
 	}
-	outfile << "PE[" << pe_current->config_reg.front()[1] << "]的输出是：dout1: " << pe_current->dout1 << " dout1_v: " << pe_current->dout1_v << " dout1_tag: " << pe_current->dout1_tag << endl;
-	outfile << "                          " << "dout2: " << pe_current->dout2 << " dout2_v: " << pe_current->dout2_v << " dout2_tag: " << pe_current->dout2_tag << endl;
-	outfile << "                          " << "bout: " << pe_current->bout << " bout_v: " << pe_current->bout_v << " bout_tag: " << pe_current->bout_tag << endl;
-
+	//更改检测和输出的顺序！！
 	//检测是否是end节点
 	if (pe_current->config_reg.front()[17])
 	{
-		if (pe_current->dout1_v | pe_current->dout2_v )
+		if (pe_current->dout1_v | pe_current->dout2_v)
 		{
 			pe_current->bout = 1;
 			pe_current->bout_v = 1;//使用out3_v作为end信号的输出，只有在output3没有被使用的情况下才可以使用
 		}
-		
+
 
 	}
+	outfile << "PE[" << pe_current->config_reg.front()[1] << "]的输出是：dout1: " << pe_current->dout1 << " dout1_v: " << pe_current->dout1_v << " dout1_tag: " << pe_current->dout1_tag << endl;
+	outfile << "                          " << "dout2: " << pe_current->dout2 << " dout2_v: " << pe_current->dout2_v << " dout2_tag: " << pe_current->dout2_tag << endl;
+	outfile << "                          " << "bout: " << pe_current->bout << " bout_v: " << pe_current->bout_v << " bout_tag: " << pe_current->bout_tag << endl;
+
 
 	
 
@@ -2148,8 +2286,8 @@ void LeSimProcess(Load* le_current,LSUnit* lsunit)
 				le_current->addr_in = pe[le_infrom_index]->dout1;
 				le_current->addr_in_v = pe[le_infrom_index]->dout1_v;
 			}
-			else
-				cout << "上一个计算地址的PE数据没有valid." << endl;
+			//else
+				//cout << "上一个计算地址的PE数据没有valid." << endl;
 		}
 		else if (le_infrom_port == 1)//地址输入来自于上一个PE的port2
 		{
@@ -2158,8 +2296,8 @@ void LeSimProcess(Load* le_current,LSUnit* lsunit)
 				le_current->addr_in = pe[le_infrom_index]->dout2;
 				le_current->addr_in_v = pe[le_infrom_index]->dout2_v;
 			}
-			else
-				cout << "上一个计算地址的PE数据没有valid." << endl;
+			//else
+				//cout << "上一个计算地址的PE数据没有valid." << endl;
 		}
 		else
 		{
@@ -2254,13 +2392,8 @@ void SeSimProcess(Store* se_current, LSUnit* lsunit)
 	//se extra out for end node 
 	se_current->se_extra_out_for_end = 0;
 	se_current->se_extra_out_for_end_v = 0;
-<<<<<<< HEAD
-	bool tag_mode = se_current->config_reg.front()[6];
-	if (tag_mode)//进行tag处理
-=======
 	bool tag_mode = se_current->config_reg.front()[8];
-	if (tag_mode)//����tag����
->>>>>>> upstream/master
+	if (tag_mode)//进行tag处理
 	{
 		//addr fetch
 		if (addr_in_flag == 0)//from pe
@@ -2308,8 +2441,8 @@ void SeSimProcess(Store* se_current, LSUnit* lsunit)
 					se[se_index_current]->data_in_tag = pe[data_in_from]->dout1_tag;
 					//pe[data_in_from]->outTableBuffer1.buffer_clear();
 				}
-				else
-					cout << "SE需要的数据还没有准备好。" << endl;
+				//else
+					//cout << "SE需要的数据还没有准备好。" << endl;
 			}
 			else if (data_in_port == 1)//port2
 			{
@@ -2320,8 +2453,8 @@ void SeSimProcess(Store* se_current, LSUnit* lsunit)
 					se[se_index_current]->data_in_tag = pe[data_in_from]->dout1_tag;
 					//pe[data_in_from]->outTableBuffer2.buffer_clear();
 				}
-				else
-					cout << "SE需要的数据还没有准备好。" << endl;
+				//else
+					//cout << "SE需要的数据还没有准备好。" << endl;
 			}
 		}
 		else if (data_in_flag == 1)//from le
@@ -2452,7 +2585,7 @@ void SeSimProcess(Store* se_current, LSUnit* lsunit)
 				}
 				else
 				{
-					cout << "SE需要的地址还没有准备好。" << endl;
+					//cout << "SE需要的地址还没有准备好。" << endl;
 				}
 			}
 			else if (addr_in_port == 1)//port2
@@ -2464,7 +2597,7 @@ void SeSimProcess(Store* se_current, LSUnit* lsunit)
 				}
 				else
 				{
-					cout << "SE需要的地址还没有准备好。" << endl;
+					//cout << "SE需要的地址还没有准备好。" << endl;
 				}
 			}
 			else
@@ -2491,8 +2624,8 @@ void SeSimProcess(Store* se_current, LSUnit* lsunit)
 					se[se_index_current]->data_in = pe[data_in_from]->dout1;
 					se[se_index_current]->data_in_v = pe[data_in_from]->dout1_v;
 				}
-				else
-					cout << "SE需要的数据还没有准备好。" << endl;
+				//else
+					//cout << "SE需要的数据还没有准备好。" << endl;
 			}
 			else if (data_in_port == 1)//port2
 			{
@@ -2501,11 +2634,11 @@ void SeSimProcess(Store* se_current, LSUnit* lsunit)
 					se[se_index_current]->data_in = pe[data_in_from]->dout2;
 					se[se_index_current]->data_in_v = pe[data_in_from]->dout2_v;
 				}
-				else
-					cout << "SE需要的数据还没有准备好。" << endl;
+				//else
+					//cout << "SE需要的数据还没有准备好。" << endl;
 			}
-			else
-				cout << "se data_in_from_port is out of range." << endl;
+			//else
+				//cout << "se data_in_from_port is out of range." << endl;
 		}
 		else if (data_in_flag == 1)//from le
 		{
@@ -2721,10 +2854,14 @@ void LendSimProcess(LoopEnd* lend_current)
 	{
 		lend_current->in2 = se[lend_in2_from_index]->se_extra_out_for_end_v;//使用SE的额外输出的valid为作为有效信号
 	}
-	else if (lend_in2_from_flag == 4)//join
+	else if (lend_in2_from_flag == 4)//JOIN
 	{
 		lend_current->in2 = join[lend_in2_from_index]->out;
 	}
+	/*else if (lend_in2_from_flag == 11)//shit
+	{
+		lend_current->in2 = shit[lend_in2_from_index]->out;
+	}*/
 	//for debug
 	outfile2 << "lend[ " << lend_index_current << " ]" << endl;
 	outfile2 << "--------------------------------------" << endl;
@@ -2771,6 +2908,12 @@ void JoinSimProcess(Join* join_current)
 	}
 	//join opration
 	join_current->join();
+	outfile2 << "---------------------------" << endl;
+	outfile2 << "Join[" << join_index_current << "]的输入是：";
+	for (int i = 0; i < (int)inport_num; i++)
+		outfile2 << join_current->inputCollect[i] << " ";
+	outfile2 << endl;
+	outfile2<< "Join[" << join_index_current << "]的输出是：" << join_current->out << endl;
 	outfile << "Join[" << join_index_current << "]的输出是：" << join_current->out << endl;
 	//都是1激活join操作之后，清空
 	if (join_current->out)
@@ -2778,7 +2921,78 @@ void JoinSimProcess(Join* join_current)
 		join_current->inputCollect.clear();
 	}
 }
+/*
+void ShitSimProcess(Shit* shit_current) {
+	auto inport_num = (shit_current->config_reg.front().size() - 3) / 3;
+	//resize inputCollect
+	shit_current->inputCollect.resize(inport_num);
 
+	auto shit_index_current = shit_current->config_reg.front()[1];
+	//data fetch
+	for (int i = 0; i < (int)inport_num; i++)
+	{
+		if (shit_current->config_reg.front()[4 + i * 3] == 1)//from PE
+		{
+			auto in_from_index = shit_current->config_reg.front()[2 + i * 3];
+			if (shit_current->config_reg.front()[3 + i * 3] == 2)//PE的port3，也是默认值
+			{
+				if (pe[in_from_index]->bout_v)
+				{
+					shit_current->inputCollect[i] = pe[in_from_index]->bout;
+				}
+			}
+			else if (shit_current->config_reg.front()[3 + i * 3] == 0)//port1
+			{
+				if (pe[in_from_index]->dout1_v)
+				{
+					shit_current->inputCollect[i] = pe[in_from_index]->dout1_v;
+				}
+			}
+			else if (shit_current->config_reg.front()[3 + i * 3] == 1)//port2
+			{
+				if (pe[in_from_index]->dout2_v)
+				{
+					shit_current->inputCollect[i] = pe[in_from_index]->dout2_v;
+				}
+			}
+		}
+		else if (shit_current->config_reg.front()[4 + i * 3] == 5)//from switch
+		{
+			auto in_from_index = shit_current->config_reg.front()[2 + i * 3];
+			if (shit_current->config_reg.front()[3 + i * 3] == 0)//port1
+			{
+				shit_current->inputCollect[i] = switch_[in_from_index]->out1;
+			}
+			else if (shit_current->config_reg.front()[3 + i * 3] == 1)//port2
+			{
+				shit_current->inputCollect[i] = switch_[in_from_index]->out2;
+			}
+		}
+		else if (shit_current->config_reg.front()[4 + i * 3] == 4)//from join
+		{
+			auto in_from_index = shit_current->config_reg.front()[2 + i * 3];
+			if (join[in_from_index]->out)
+			{
+				shit_current->inputCollect[i] = join[in_from_index]->out;
+			}
+		}
+	}
+	//join opration
+	shit_current->shit();
+	outfile << "Shit[" << shit_index_current << "]的输出是：" << shit_current->out << endl;
+	outfile2 << "---------------------------" << endl;
+	outfile2 << "Shit[" << shit_index_current << "]的输入是：";
+	for (int i = 0; i < (int)inport_num; i++)
+		outfile2 << shit_current->inputCollect[i] << " ";
+	outfile2 << endl;
+	outfile2 << "Shit[" << shit_index_current << "]的输出是：" << shit_current->out << endl;
+	outfile2 << "---------------------------" << endl;
+	//都是1激活join操作之后，清空
+	if (shit_current->out)
+	{
+		shit_current->inputCollect.clear();
+	}
+}*/
 void JoinBpSimProcess(JoinBp* joinbp_current)
 {
 	auto inport_num = (joinbp_current->config_reg.front().size() - 3) / 3;
@@ -3026,8 +3240,8 @@ void LendsSimProcess(LoopEnds* lends_current)
 			lends_current->compare_in = pe[lends_in1_from_index]->bout;
 			lends_current->compare_in_v = pe[lends_in1_from_index]->bout_v;
 		}
-		else
-			cout << "不满足取数条件，不取数" << endl;
+		//else
+			//cout << "不满足取数条件，不取数" << endl;
 	}
 	else if (lends_in1_from_flag == 2)//lbegin
 	{
