@@ -46,7 +46,16 @@ void ProcessingElement::ALU(int opcode, int in1, int in2 ,bool for_mux)//ALU作�
 			alu_out_v = 1;
 			break;
 
+<<<<<<< HEAD
 		case 6: //判断两输入的大小
+=======
+		case 4://div
+			alu_out = in1 / in2;
+			alu_out_v = 1;
+			break;
+
+		case 6: //�ж�������Ĵ�С
+>>>>>>> upstream/master
 			alu_out_b = in1 < in2 ? 1 : 0;
 			alu_out_b_v = 1;
 			break;
@@ -67,12 +76,18 @@ void ProcessingElement::ALU(int opcode, int in1, int in2 ,bool for_mux)//ALU作�
 			alu_out = in1 << in2;
 			alu_out_v = 1;
 			break;
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/master
 		case 13://rishift
 			alu_out = in1 >> in2;
 			alu_out_v = 1;
 			break;
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/master
 		case 14://or
 			alu_out = in1 | in2;
 			alu_out_v = 1;
@@ -418,7 +433,11 @@ bool InTableBuffer::line_ok(vector<TableLine>::size_type i,ProcessingElement* pe
 	{
 		if (pe->config_reg.front()[2] == 8)//MUX操作
 		{
+<<<<<<< HEAD
 			if (InTableBufferEntity[i].valid3 & InTableBufferEntity[i].data3)// valid3=1;data3=0,选择in2
+=======
+			if (InTableBufferEntity[i].valid3 & !InTableBufferEntity[i].data3)// valid3=1;data3=0,ѡ��in2
+>>>>>>> upstream/master
 			{
 				if (InTableBufferEntity[i].valid2)
 				{
@@ -520,8 +539,8 @@ void InTableBuffer::dataIn(ProcessingElement* pe)
 {
 	//ack clear before op
 	pe->ack2in1port = 0;
-	pe->ack2in1port = 0;
-	pe->ack2in1port = 0;
+	pe->ack2in2port = 0;
+	pe->ack2in3port = 0;
 
 	//check flag_reg,3steps to simulate
 	flag_reg1 = pe->config_reg.front()[20];
@@ -564,7 +583,7 @@ void InTableBuffer::dataIn(ProcessingElement* pe)
 					//table遍历一遍没有匹配的tag,将tag和数据插入表中空位
 					for (vector<TableLine>::size_type i = 0; i < InTableBufferEntity.size(); i++)
 					{
-						if (InTableBufferEntity[i].tag == 0 && ((InTableBufferEntity[i].valid2) | (InTableBufferEntity[i].valid3)) == 0)
+						if (InTableBufferEntity[i].tag == 0 && ((InTableBufferEntity[i].valid2) | (InTableBufferEntity[i].valid3) | (InTableBufferEntity[i].valid1)) == 0)
 						{
 							InTableBufferEntity[i].tag = pe->din1_tag;
 							InTableBufferEntity[i].valid1 = 1;
@@ -623,7 +642,7 @@ void InTableBuffer::dataIn(ProcessingElement* pe)
 					//table遍历一遍没有匹配的tag,将tag和数据插入表中空位
 					for (vector<TableLine>::size_type i = 0; i < InTableBufferEntity.size(); i++)
 					{
-						if (InTableBufferEntity[i].tag == 0 && ((InTableBufferEntity[i].valid1) | (InTableBufferEntity[i].valid3 == 0)))
+						if (InTableBufferEntity[i].tag == 0 && ((InTableBufferEntity[i].valid1) | (InTableBufferEntity[i].valid3) | (InTableBufferEntity[i].valid2)) == 0)
 						{
 							InTableBufferEntity[i].tag = pe->din2_tag;
 							InTableBufferEntity[i].valid2 = 1;
@@ -677,7 +696,7 @@ void InTableBuffer::dataIn(ProcessingElement* pe)
 					//table遍历一遍没有匹配的tag,将tag和数据插入表中空位
 					for (vector<TableLine>::size_type i = 0; i < InTableBufferEntity.size(); i++)
 					{
-						if (InTableBufferEntity[i].tag == 0 && ((InTableBufferEntity[i].valid1) | (InTableBufferEntity[i].valid2 == 0)))
+						if (InTableBufferEntity[i].tag == 0 && ((InTableBufferEntity[i].valid1) | (InTableBufferEntity[i].valid3) | (InTableBufferEntity[i].valid2)) == 0)
 						{
 							InTableBufferEntity[i].tag = pe->bin_tag;
 							InTableBufferEntity[i].valid3 = 1;

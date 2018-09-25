@@ -233,12 +233,22 @@ void PeSimProcess(ProcessingElement* pe_current)
 		{
 			if (bin_from_port == 0)//lendçš„port2back
 			{
+<<<<<<< HEAD
 
 				pe_current->bin_v = lend[bin_from_index]->out2back;//ä½¿èƒ½ä¿¡å·ä»Žvalidå£è¿›å…¥																					   											
+=======
+				pe_current->bin = lend[bin_from_index]->out2back;
+				pe_current->bin_v = lend[bin_from_index]->out2back;//Ê¹ÄÜÐÅºÅ´Óvalid¿Ú½øÈë																					   											
+>>>>>>> upstream/master
 			}
 			else if (bin_from_port == 1)//FG2çš„port2end
 			{
+<<<<<<< HEAD
 				pe_current->bin_v = lend[bin_from_index]->out2end;//ä½¿èƒ½ä¿¡å·ä»Žvalidå£è¿›å…¥																					  												
+=======
+				pe_current->bin = lend[bin_from_index]->out2end;
+				pe_current->bin_v = lend[bin_from_index]->out2end;//Ê¹ÄÜÐÅºÅ´Óvalid¿Ú½øÈë																					  												
+>>>>>>> upstream/master
 			}
 			else
 				cout << "port è¶…å‡ºäº†èŒƒå›´" << endl;
@@ -491,6 +501,9 @@ void PeSimProcess(ProcessingElement* pe_current)
 		}
 		else if (mode == 3)//bypass and calculate
 		{
+			pe_sim_step3(pe_current);
+			pe_sim_step2(pe_current);
+			pe_sim_step1(pe_current);
 		}
 		else if (mode == 4)//transmit and calculate
 		{
@@ -772,8 +785,11 @@ void PeSimProcess(ProcessingElement* pe_current)
 				*/
 			}
 
-			else if (1)//011
+			else if (is_din1_float == 0 && is_din2_float != 0 && is_bin_float == !0)//011
 			{
+				pe_sim_step3_no_tag(pe_current);
+				pe_sim_step2_no_tag(pe_current);
+				pe_sim_step1_no_tag(pe_current);
 			}
 			//......	
 			else
@@ -1220,7 +1236,11 @@ void pe_sim_step1(ProcessingElement* pe_current)
 		//æ•°æ®è¿›å…¥tableBufferä¹‹åŽæ‰å¼€å§‹æ¸…æ•°æ®
 		if (din1_from_port == 0)//port1
 		{
+<<<<<<< HEAD
 			if (port1_fanout_num <= 1)//æ²¡æœ‰ä¸€å¯¹å¤šçš„æƒ…å†µ
+=======
+			if (port1_fanout_num <= 1)//Ò»¶ÔÒ»µÄÇé¿ö
+>>>>>>> upstream/master
 			{
 				if (pe_current->ack2in1port)
 				{
@@ -1627,6 +1647,12 @@ void pe_sim_step3(ProcessingElement* pe_current)
 
 		else if (pe_current->config_reg.front()[15] == 3)//ob1 from in1
 		{
+			if (pe_current->alu_out_v)
+			{
+				pe_current->outbuffer1_in = pe_current->din1;
+				pe_current->outbuffer1_in_v = pe_current->din1_v;
+			}
+			
 		}
 		else if (pe_current->config_reg.front()[15] == 2)//ob1 from lr
 		{
@@ -1662,6 +1688,7 @@ void pe_sim_step3(ProcessingElement* pe_current)
 	if (pe_current->config_reg.front()[16])//ob2éžæ‚¬ç©º
 	{
 		pe_current->outbuffer2_in_tag = pe_current->inbuffer1_out_tag;
+
 		if (pe_current->config_reg.front()[16] == 1)//ob2 from alu
 		{
 			pe_current->outbuffer2_in = pe_current->alu_out;
@@ -1671,6 +1698,12 @@ void pe_sim_step3(ProcessingElement* pe_current)
 
 		else if (pe_current->config_reg.front()[16] == 3)//ob2 from in2
 		{
+			if (pe_current->alu_out_v)
+			{
+				pe_current->outbuffer2_in = pe_current->din2;
+				pe_current->outbuffer2_in_v = pe_current->din2_v;
+			}
+			
 		}
 		else if (pe_current->config_reg.front()[16] == 2)//ob2 from lr
 		{
@@ -2155,7 +2188,7 @@ void LeSimProcess(Load* le_current,LSUnit* lsunit)
 					lsunit->AddTrans(le_current->addr_out, le_index_current, (int)le_current->addr_out_v);
 				}
 			}
-			lsunit->update();
+			//lsunit->update();
 			//
 			if (le_current->load_success)
 			{
@@ -2221,8 +2254,13 @@ void SeSimProcess(Store* se_current, LSUnit* lsunit)
 	//se extra out for end node 
 	se_current->se_extra_out_for_end = 0;
 	se_current->se_extra_out_for_end_v = 0;
+<<<<<<< HEAD
 	bool tag_mode = se_current->config_reg.front()[6];
 	if (tag_mode)//è¿›è¡Œtagå¤„ç†
+=======
+	bool tag_mode = se_current->config_reg.front()[8];
+	if (tag_mode)//½øÐÐtag´¦Àí
+>>>>>>> upstream/master
 	{
 		//addr fetch
 		if (addr_in_flag == 0)//from pe
@@ -2752,7 +2790,7 @@ void JoinBpSimProcess(JoinBp* joinbp_current)
 	//data fetch
 	for (int i = 0; i < (int)inport_num; i++)
 	{
-		
+		//from pe
 		if (joinbp_current->config_reg.front()[4 + i * 3] == 1)//from PE
 		{
 			auto in_from_index = joinbp_current->config_reg.front()[2 + i * 3];
@@ -2777,6 +2815,37 @@ void JoinBpSimProcess(JoinBp* joinbp_current)
 					joinbp_current->inputCollect[i] = pe[in_from_index]->ack2in2port;
 				}				
 			}
+		}
+		//from se
+		else if (joinbp_current->config_reg.front()[4 + i * 3] == 9)
+		{
+			auto in_from_index = joinbp_current->config_reg.front()[2 + i * 3];			
+			if (joinbp_current->config_reg.front()[3 + i * 3] == 0)//port1
+			{
+				if (se[in_from_index]->ack2addr_source_node)
+				{
+					joinbp_current->inputCollect[i] = se[in_from_index]->ack2addr_source_node;
+				}
+			}
+			else if (joinbp_current->config_reg.front()[3 + i * 3] == 1)//port2
+			{
+				if (se[in_from_index]->ack2data_source_node)
+				{
+					joinbp_current->inputCollect[i] = se[in_from_index]->ack2data_source_node;
+				}
+			}
+		}
+		//from le
+		else if (joinbp_current->config_reg.front()[4 + i * 3] == 10)
+		{
+			auto in_from_index = joinbp_current->config_reg.front()[2 + i * 3];
+			if (joinbp_current->config_reg.front()[3 + i * 3] == 0)//port1
+			{
+				if (le[in_from_index]->ack2addrgen)
+				{
+					joinbp_current->inputCollect[i] = le[in_from_index]->ack2addrgen;
+				}
+			}			
 		}
 	}
 	//join opration
