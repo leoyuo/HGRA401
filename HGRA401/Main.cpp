@@ -396,8 +396,8 @@ int main(int argc,char* argv[])
 
 		if (end)
 			break;
-		if (cnt == 50)
-			break;
+		/*if (cnt == 50)
+			break;*/
 
 		cnt++;
 	}
